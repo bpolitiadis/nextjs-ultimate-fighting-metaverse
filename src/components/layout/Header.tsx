@@ -23,6 +23,10 @@ export function Header(props: Props) {
       <Spacer />
 
       <Flex alignItems="center" gap={4}>
+        <LinkComponent href="/">Home</LinkComponent>
+        <LinkComponent href="/mint">Mint</LinkComponent>
+        <LinkComponent href="/fight">Fight</LinkComponent>
+        <LinkComponent href="/about">About</LinkComponent>
         <ConnectKitButton />
         <ThemeSwitcher />
       </Flex>

@@ -1,0 +1,102 @@
+.root {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 20px;
+  width: 100%;
+}
+
+.selectionMenu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  /* width: 500px; */
+  padding: 20px;
+  margin: 20px;
+  border-color: aquamarine;
+  border-width: 1px;
+}
+
+.selectionMenu > * {
+  /* width: 400px; */
+}
+
+.mintContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  /* width: 500px; */
+  padding: 20px;
+  margin: 20px;
+  border-color: aquamarine;
+  border-width: 1px;
+}
+
+.imagesContainer {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+  /* width: 500px; */
+  padding: 20px;
+  margin: 20px;
+}
+.imagesContainer > * {
+  width: 50%;
+}
+
+.image {
+  height: 50%;
+  width: auto;
+}
+
+.imageContainer {
+  display: flex;
+}
+
+/* .card {
+  width: 250px;
+  border: 3px solid #e8e8e8;
+  overflow: hidden;
+  border-radius: 15px;
+} */
+
+.text-field {
+  width: 300px;
+}
+
+.Button {
+  display: inline-block;
+  border: none;
+  width: 400px;
+  border-radius: 4px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Roboto', sans-serif;
+  color: white;
+  background-color: forestgreen;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Increase the specificity */
+.Button:hover {
+  background-color: rgb(46, 170, 46);
+}
+
+.Button:active {
+  background-color: darkgreen;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
