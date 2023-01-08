@@ -6,10 +6,8 @@ import { useContractWrite, usePrepareContractWrite } from 'wagmi'
 import abi from '../../../constants/abi.json'
 import css from '../../styles/mint.module.css'
 import { ethers } from 'ethers'
-import { storeImage, storeTokeUriMetadata } from '../../utils/uploadToIPFS'
-// import * as dotenv from 'dotenv'
-
-// dotenv.config()
+import { NFTStorage, File, Blob } from 'nft.storage'
+import axios from 'axios'
 
 export default function Mint() {
   const [formData, setFormData] = useState({
@@ -21,13 +19,33 @@ export default function Mint() {
     weightClass: 'Middleweight',
   })
 
-  const [images, setImages] = useState<ImagesResponseDataInner[]>([])
+  // const [images, setImages] = useState<ImagesResponseDataInner[]>([])
+  const [imageUrl, setImageUrl] = useState('')
+  const [base64String, setBase64String] = useState('')
+  const [imagesBinaryData, setImagesBinaryData] = useState<ImagesResponseDataInner[]>([])
   const [selectedImage, setSelectedImage] = useState('')
+
+  const NFT_STORAGE_TOKEN =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGFFY2VjOTQ3RTQ0NzlGNzkzNEM2YmY2QjQ5N2REMjYzODEzOUY1MzYiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY3MzAxNTMzNTAzNywibmFtZSI6InVmbSJ9.Z0GlhEXy8FLduEs5KX_dEEFupVi8Jqrp4WaOc6XtLSk'
+  // const NFT_STORAGE_TOKEN = process.env.NEXT_PUBLIC_NFTSTORAGE
+
+  const textPrompt = `
+  Character Avatar picture of fighting game.
+  Character must be human.
+  Image must be clean with no letters or numbers or stats or symbols on it. 
+  Background must be white.
+  Character fighting style is ${formData['martialArt']}. 
+  External characteristics:
+  Character has to be an ${formData['skin']} skinned ${formData['gender']}
+  with ${formData['hairColor']} hair and a ${formData['hairStyle']} hair style.
+  Character has to be in the ${formData['weightClass']} weight class division.
+  Art style: Digital Anime Art
+`
 
   const oai = useRef(
     new OpenAIApi(
       new Configuration({
-        // organization: "org-QSeiWUv21jjZOahwJ8IjepUA",
+        organization: process.env.NEXT_PUBLIC_OPENAI_ORG_KEY,
         apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
       })
     )
@@ -57,39 +75,13 @@ export default function Mint() {
 
   const create = async () => {
     try {
-      const text = `
-        Character Avatar picture of fighting game.
-        Character must be human.
-        Image must be clean with no letters or numbers or stats or symbols on it. 
-        Background must be white.
-        Character fighting style is ${formData['martialArt']}. 
-        External characteristics:
-        Character has to be an ${formData['skin']} skinned ${formData['gender']}
-        with ${formData['hairColor']} hair and a ${formData['hairStyle']} hair style.
-        Character has to be in the ${formData['weightClass']} weight class division.
-        Art style: Digital Anime Art
-      `
-      console.log(text)
-
-      console.log(process.env.NEXT_PUBLIC_OPENAI_API_KEY)
-      const { data } = await oai.current.createImage({
-        prompt: text,
-        n: 4,
+      const response = await oai.current.createImage({
+        prompt: textPrompt,
+        n: 2,
         size: '256x256',
+        response_format: 'b64_json',
       })
-      setImages(data.data)
-      console.log(data.data)
-      // write?.({
-      // 	recklesslySetUnpreparedArgs: [formData['martialArt'], data.data[0].url],
-      // });
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const create2 = async () => {
-    try {
-      setImages(data.data)
+      setImagesBinaryData(response.data.data)
     } catch (error) {
       console.error(error)
     }
@@ -97,30 +89,48 @@ export default function Mint() {
 
   const mint = async () => {
     try {
-      console.log(selectedImage)
+      // console.log('nft.storage token' + NFT_STORAGE_TOKEN)
+      const client = new NFTStorage({ token: NFT_STORAGE_TOKEN })
 
-      const response = await storeImage(selectedImage)
-      console.log(response.toString())
-      // write?.({
-      //   recklesslySetUnpreparedArgs: [formData['martialArt'], selectedImage],
-      // })
+      const imageFile = new File([selectedImage], 'UFM-12345.png', { type: 'image/png' })
+      const someData = new Blob([selectedImage])
+      const cid = await client.storeBlob(someData)
+      console.log(cid)
+
+      const metadata = await client.store({
+        name: 'UFM',
+        description: 'Ultimate Fighting Metaverse NFT Fighter',
+        image: imageFile,
+        imageBase64: selectedImage,
+        blobURI: 'ipfs://' + cid,
+        gatewayURI: 'https://ipfs.io/ipfs/' + cid,
+      })
+
+      console.log(metadata)
+      console.log(metadata.url)
+      // console.log(metadata.data.imageBase64)
+      setBase64String(metadata.data.imageBase64)
+
+      write?.({
+        recklesslySetUnpreparedArgs: [formData['martialArt'], metadata.url],
+      })
     } catch (error) {
       console.error(error)
     }
+  }
 
-    // storeImage(selectedImage)
-    // write?.({ recklesslySetUnpreparedArgs: [formData['martialArt'], selectedImage] })
+  const ipfsGatewayReplace = (url: string) => {
+    return url.replace(/^ipfs:\/\//, 'https://ipfs.io/ipfs/')
   }
 
   return (
     <>
       <Head />
-
       <main>
         <Heading as="h2">Mint Page</Heading>
         <Text>
-          Welcome to the Ultimate Fighting Metaverse NFT mint page! It's time to create your very own digital asset representing your ultimate
-          fighter. Plus, each NFT is one-of-a-kind, generated by the amazing DALL-e. Are you ready to prove your worth in the ring? Let's do this!
+          Welcome to the Ultimate Fighting Metaverse NFT mint page! It&aposs time to create your very own digital asset representing your ultimate
+          fighter. Plus, each NFT is one-of-a-kind, generated by the amazing DALL-E. Are you ready to prove your worth in the ring? Let&aposs do this!
         </Text>
         <div className={css.root}>
           <div className={css.container}>
@@ -183,6 +193,20 @@ export default function Mint() {
             </div>
             <div className={css.mintContainer}>
               <div className={css.imagesContainer}>
+                {imagesBinaryData.length > 0 &&
+                  imagesBinaryData.map((img) => (
+                    <label key={img.b64_json}>
+                      <input
+                        type="radio"
+                        value={img.b64_json}
+                        checked={img.b64_json === selectedImage}
+                        onChange={(event) => setSelectedImage(event.target.value)}
+                      />
+                      <Image className={css.image} src={`data:image/png;base64,${img.b64_json}`} alt="Dall-e" />
+                    </label>
+                  ))}
+              </div>
+              {/* <div className={css.imagesContainer}>
                 {images.length > 0 &&
                   images.map((img) => (
                     <label key={img.url}>
@@ -195,14 +219,17 @@ export default function Mint() {
                       <Image className={css.image} src={img.url} alt="Dall-e" />
                     </label>
                   ))}
-              </div>
-              <Button disabled={write} onClick={mint} variant="contained" className={css.Button}>
+              </div> */}
+              <Button disabled={!write} onClick={mint} variant="contained" className={css.Button}>
                 Mint
               </Button>
             </div>
             <br />
           </div>
-
+          {/* <div className={css.container}>
+            <Image className={css.image} src={`data:image/png;base64,${selectedImage}`} alt="Dall-e" />
+            <Image className={css.image} src={`data:image/png;base64, ${base64String}`} alt="ToMoun-e" />
+          </div> */}
           {isLoading && <div>Check Wallet</div>}
           {isSuccess && (
             <div>

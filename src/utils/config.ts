@@ -10,8 +10,8 @@ export const THEME_CONFIG = {
   initialColorMode: THEME_INITIAL_COLOR,
 }
 
-export const SOCIAL_TWITTER = 'wslyvh'
-export const SOCIAL_GITHUB = 'wslyvh/nexth'
+export const SOCIAL_TWITTER = 'vpol24'
+export const SOCIAL_GITHUB = 'bpolitiadis/nextjs-ultimate-fighting-metaverse'
 
 // export const ETH_CHAINS = [mainnet, goerli, sepolia, polygon, optimism, arbitrum, polygonMumbai]
 export const ETH_CHAINS = [mainnet, goerli, polygon, polygonMumbai]
