@@ -2,12 +2,14 @@ import { Heading, Text, Button, MenuItem, FormControl, Select, Image } from '@ch
 import { Head } from 'components/layout/Head'
 import React, { useEffect, useRef, useState } from 'react'
 import { Configuration, ImagesResponseDataInner, OpenAIApi } from 'openai'
-import { useContractWrite, usePrepareContractWrite } from 'wagmi'
+import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
 import abi from '../../../constants/abi.json'
 import css from '../../styles/mint.module.css'
 import { ethers } from 'ethers'
 import { NFTStorage, File, Blob } from 'nft.storage'
+import { Address, readContract } from '@wagmi/core'
 import axios from 'axios'
+import { useDebounce } from 'usehooks-ts'
 
 export default function Mint() {
   const [formData, setFormData] = useState({
@@ -16,31 +18,44 @@ export default function Mint() {
     skin: 'Caucasian',
     hairStyle: 'Short',
     hairColor: 'Black',
-    weightClass: 'Middleweight',
   })
 
   // const [images, setImages] = useState<ImagesResponseDataInner[]>([])
-  const [imageUrl, setImageUrl] = useState('')
+  const [tokenUrl, setTokenUrl] = useState('')
+  const debouncedTokenId = useDebounce(tokenUrl, 500)
+
   const [base64String, setBase64String] = useState('')
   const [imagesBinaryData, setImagesBinaryData] = useState<ImagesResponseDataInner[]>([])
   const [selectedImage, setSelectedImage] = useState('')
 
-  const NFT_STORAGE_TOKEN =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweGFFY2VjOTQ3RTQ0NzlGNzkzNEM2YmY2QjQ5N2REMjYzODEzOUY1MzYiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY3MzAxNTMzNTAzNywibmFtZSI6InVmbSJ9.Z0GlhEXy8FLduEs5KX_dEEFupVi8Jqrp4WaOc6XtLSk'
-  // const NFT_STORAGE_TOKEN = process.env.NEXT_PUBLIC_NFTSTORAGE
+  const contract = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
 
+  const NFT_STORAGE_TOKEN = process.env.NEXT_PUBLIC_NFTSTORAGE
+  const client = new NFTStorage({ token: NFT_STORAGE_TOKEN })
+
+  //Design a full-body 8k+ digital avatar of a female character for a video game with dark skin and brown hair styled in braids. The character should be shown in a futuristic fighting style inspired by muay thai and set against a simple, symbol-free background. The image should be visually striking and dynamic with a polished finish.
   const textPrompt = `
-  Character Avatar picture of fighting game.
-  Character must be human.
-  Image must be clean with no letters or numbers or stats or symbols on it. 
-  Background must be white.
-  Character fighting style is ${formData['martialArt']}. 
-  External characteristics:
-  Character has to be an ${formData['skin']} skinned ${formData['gender']}
-  with ${formData['hairColor']} hair and a ${formData['hairStyle']} hair style.
-  Character has to be in the ${formData['weightClass']} weight class division.
-  Art style: Digital Anime Art
-`
+    High resolution 8k+ digital avatar of a human martial artist video game character.
+    Background should be simplistic and without letters, numbers, or symbols.
+    Character has to be in an action pose with bold lines and a polished finish.
+    Character is a ${formData['martialArt']} master.
+    External characteristics:
+    Gender - ${formData['gender']}
+    Skin - ${formData['skin']}
+    Hair Style - ${formData['hairStyle']}
+    Hair Color - ${formData['hairColor']}
+  `
+  // Character has to be an ${formData['skin']} skinned ${formData['gender']}
+  // with ${formData['hairColor']} hair and a ${formData['hairStyle']} hair style.
+  // Character has to be in the ${formData['weightClass']} weight class division.
+  // Art style: Digital Anime Art
+
+  //   const textPrompt = `
+  //   Create a high-resolution (8k or higher) digital avatar of a ${formData['gender']}, ${formData['skin']} skinned human character for a fighting martial arts video game,
+  //   Character should have ${formData['hairStyle']} ${formData['hairColor']} hair and be depicted in a action pose. Fighter should be a master ${formData['martialArt']} martial artist.
+  //   The background should be simplistic and without letters, numbers, or symbols.
+  //   The image should be visually striking and dynamic, with a polished finish.
+  // `
 
   const oai = useRef(
     new OpenAIApi(
@@ -51,29 +66,8 @@ export default function Mint() {
     )
   )
 
-  const { config } = usePrepareContractWrite({
-    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
-    abi: abi,
-    functionName: 'mint',
-    args: [
-      'Judo',
-      'https://oaidalleapiprodscus.blob.core.windows.net/private/org-VRpf7xj3xFII0I4O9QQxdLnz/user-29wJJuLmNEdwAEb6pby27pKy/img-py8KqrOJlUzHBwIY6KRFmwiZ.png?st=2022-12-18T13%3A17%3A09Z&se=2022-12-18T15%3A17%3A09Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2022-12-18T05%3A26%3A23Z&ske=2022-12-19T05%3A26%3A23Z&sks=b&skv=2021-08-06&sig=YZQ/ZNbRBRbRVWnApzKpRMQsV9266%2Bx7WK6m/qvgT9M%3D',
-    ],
-    overrides: {
-      value: ethers.utils.parseEther('0.01'),
-    },
-  })
-
-  const { data, isLoading, isSuccess, write } = useContractWrite(config)
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }))
-  }
-
   const create = async () => {
+    console.log(textPrompt)
     try {
       const response = await oai.current.createImage({
         prompt: textPrompt,
@@ -81,21 +75,40 @@ export default function Mint() {
         size: '256x256',
         response_format: 'b64_json',
       })
+      // console.log(response.data.data)
       setImagesBinaryData(response.data.data)
     } catch (error) {
       console.error(error)
     }
   }
 
+  const {
+    config,
+    error: prepareError,
+    isError: isPrepareError,
+  } = usePrepareContractWrite({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address,
+    abi: abi,
+    functionName: 'safeMint',
+    args: [debouncedTokenId.toString()],
+    enabled: Boolean(debouncedTokenId),
+    overrides: {
+      value: ethers.utils.parseEther('0.01'),
+    },
+  })
+
+  const { data, error, isError, write } = useContractWrite(config)
+
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+  })
+
   const mint = async () => {
     try {
-      // console.log('nft.storage token' + NFT_STORAGE_TOKEN)
-      const client = new NFTStorage({ token: NFT_STORAGE_TOKEN })
-
       const imageFile = new File([selectedImage], 'UFM-12345.png', { type: 'image/png' })
       const someData = new Blob([selectedImage])
       const cid = await client.storeBlob(someData)
-      console.log(cid)
+      // console.log(cid)
 
       const metadata = await client.store({
         name: 'UFM',
@@ -104,16 +117,25 @@ export default function Mint() {
         imageBase64: selectedImage,
         blobURI: 'ipfs://' + cid,
         gatewayURI: 'https://ipfs.io/ipfs/' + cid,
+        properties: {
+          tokenID: '12345',
+          martialArt: formData['martialArt'],
+          gender: formData['gender'],
+          skin: formData['skin'],
+          hairColor: formData['hairColor'],
+          hairStyle: formData['hairStyle'],
+        },
       })
 
       console.log(metadata)
       console.log(metadata.url)
       // console.log(metadata.data.imageBase64)
       setBase64String(metadata.data.imageBase64)
+      setTokenUrl(metadata.url)
 
-      write?.({
-        recklesslySetUnpreparedArgs: [formData['martialArt'], metadata.url],
-      })
+      write?.()
+      console.log('Minted!')
+      console.log(data)
     } catch (error) {
       console.error(error)
     }
@@ -123,15 +145,23 @@ export default function Mint() {
     return url.replace(/^ipfs:\/\//, 'https://ipfs.io/ipfs/')
   }
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }))
+  }
+
   return (
     <>
       <Head />
       <main>
         <Heading as="h2">Mint Page</Heading>
         <Text>
-          Welcome to the Ultimate Fighting Metaverse NFT mint page! It&aposs time to create your very own digital asset representing your ultimate
-          fighter. Plus, each NFT is one-of-a-kind, generated by the amazing DALL-E. Are you ready to prove your worth in the ring? Let&aposs do this!
+          Welcome to the Ultimate Fighting Metaverse NFT mint page! It's time to create your very own digital asset representing your ultimate
+          fighter. Plus, each NFT is one-of-a-kind, generated by the amazing DALL-E. Are you ready to prove your worth in the ring? Let's do this!
         </Text>
+        {/* <Text> Next token to be minted: {nextTokenId}</Text> */}
         <div className={css.root}>
           <div className={css.container}>
             <div className={css.selectionMenu}>
@@ -144,10 +174,13 @@ export default function Mint() {
               <br />
               <FormControl name="martialArt" label="Martial Art" value={formData['martialArt']} onChange={handleChange}>
                 <Select placeholder="Select martial art">
+                  <option value="Boxing">Boxing</option>
+                  <option value="Capoeira">Capoeira</option>
                   <option value="Wrestling">Wrestling</option>
                   <option value="KickBoxing">Kick-Boxing</option>
+                  <option value="Karate">Karate</option>
                   <option value="Judo">Judo</option>
-                  <option value="JiuJitsu">Jiu Jitsu</option>
+                  <option value="BrazilianJiuJitsu">Brazilian Jiu Jitsu</option>
                   <option value="MuaiThai">Muai Thai</option>
                 </Select>
               </FormControl>
@@ -156,7 +189,7 @@ export default function Mint() {
               <FormControl label="Skin" name="skin" value={formData['skin']} onChange={handleChange}>
                 <Select placeholder="Select skin">
                   <option value="Caucasian">Caucasian</option>
-                  <option value="DarkSkinned">Dark-Skinned</option>
+                  <option value="DarkSkinned">Dark</option>
                   <option value="Asian">Asian</option>
                 </Select>
               </FormControl>
@@ -176,14 +209,6 @@ export default function Mint() {
                   <option value="Blonde">Blonde</option>
                   <option value="Brown">Brown</option>
                   <option value="Ginger">Ginger</option>
-                </Select>
-              </FormControl>
-              <br />
-              <FormControl label="Weight Class" name="weightClass" value={formData['weightClass']} onChange={handleChange}>
-                <Select placeholder="Select weight class">
-                  <option value="Lightweight">Lightweight</option>
-                  <option value="Middleweight">Middleweight</option>
-                  <option value="Heavyweight">Heavyweight</option>
                 </Select>
               </FormControl>
               <br />
@@ -220,23 +245,22 @@ export default function Mint() {
                     </label>
                   ))}
               </div> */}
-              <Button disabled={!write} onClick={mint} variant="contained" className={css.Button}>
-                Mint
+              <Button disabled={!write || isLoading} onClick={mint} variant="contained" className={css.Button}>
+                {isLoading ? 'Minting...' : 'Mint'}
               </Button>
             </div>
             <br />
           </div>
-          {/* <div className={css.container}>
+          <div className={css.container}>
             <Image className={css.image} src={`data:image/png;base64,${selectedImage}`} alt="Dall-e" />
             <Image className={css.image} src={`data:image/png;base64, ${base64String}`} alt="ToMoun-e" />
-          </div> */}
+          </div>
           {isLoading && <div>Check Wallet</div>}
           {isSuccess && (
             <div>
               <br />
               <Text> Your fighter is being minted </Text>
               <Text>
-                {' '}
                 Transaction:{' '}
                 <a style={{ color: '#4ba9af' }} href={`https://mumbai.polygonscan.com/tx/${data.hash}`} target="_blank" rel="noopener noreferrer">
                   {data.hash}
@@ -244,6 +268,7 @@ export default function Mint() {
               </Text>
             </div>
           )}
+          {(isPrepareError || isError) && <div>Error: {(prepareError || error)?.message}</div>}
         </div>
       </main>
     </>
