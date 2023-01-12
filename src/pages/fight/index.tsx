@@ -1,4 +1,4 @@
-import { Heading, Text, Button, Image } from '@chakra-ui/react'
+import { Heading, Text, Button, Image, Grid, Flex } from '@chakra-ui/react'
 import { Head } from 'components/layout/Head'
 import React, { useEffect, useRef, useState } from 'react'
 import { Address, useAccount, useContractRead, usePrepareContractWrite } from 'wagmi'
@@ -32,25 +32,25 @@ export default function Fight() {
     <>
       <Head />
       <main>
-        <Heading as="h2">Fight Page</Heading>
+        {/* <Heading as="h2">Fight Page</Heading>
         <Text>
           Welcome to the Ultimate Fighting Metaverse fight page! This is where you'll be able to use your one-of-a-kind NFT to access and battle in
           our virtual reality game. Select your fighter and get ready to prove your worth in the ring. Are you ready to take on all challengers? Let's
           do this!
-        </Text>
+        </Text> */}
         <div className={css.root}>
           <div className={css.container}>
             <Heading as="h3">My Fighters</Heading>
-            <Text>Hi {user} Here are the fighters you own. Select one to fight!</Text>
-            <Text>
+            <Text>Hi {user} !</Text>
+            <Text>Here are the fighters you own. Select one to fight!</Text>
+            {/* <Text>
               Congratulations! You own {myFighterIds.length} Ultimate Fighters: {myFighterIds.toString()}
-            </Text>
-          </div>
-          {/* TODO - CHECK CHAKRA-UI/CARD */}
-          <div className={css.fighters}>
-            {myFighterIds.map((fighterId) => (
-              <FighterCard key={fighterId} fighter={fighterId} user={user} />
-            ))}
+            </Text> */}
+            <Grid className={css.fighters} templateColumns={`repeat(3, 1fr)`} gap={4}>
+              {myFighterIds.map((fighterId) => (
+                <FighterCard key={fighterId} fighter={fighterId} user={user} />
+              ))}
+            </Grid>
           </div>
         </div>
       </main>
