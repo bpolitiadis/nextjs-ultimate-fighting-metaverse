@@ -10,6 +10,7 @@ import { NFTStorage, File, Blob } from 'nft.storage'
 import { Address, readContract } from '@wagmi/core'
 import axios from 'axios'
 import { useDebounce } from 'usehooks-ts'
+import { useMenuItem } from '@chakra-ui/menu'
 
 export default function Mint() {
   const [formData, setFormData] = useState({
@@ -27,8 +28,6 @@ export default function Mint() {
   const [base64String, setBase64String] = useState('')
   const [imagesBinaryData, setImagesBinaryData] = useState<ImagesResponseDataInner[]>([])
   const [selectedImage, setSelectedImage] = useState('')
-
-  const contract = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
 
   const NFT_STORAGE_TOKEN = process.env.NEXT_PUBLIC_NFTSTORAGE
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN })
@@ -146,6 +145,7 @@ export default function Mint() {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(formData.toString())
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
@@ -165,15 +165,18 @@ export default function Mint() {
         <div className={css.root}>
           <div className={css.container}>
             <div className={css.selectionMenu}>
-              <FormControl label="Gender" name="gender" value={formData['gender']} onChange={handleChange}>
-                <Select placeholder="Select gender">
+              <FormControl>
+                <Select value={formData.gender} onChange={(e) => setFormData({ ...formData, gender: e.target.value })}>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </Select>
               </FormControl>
               <br />
-              <FormControl name="martialArt" label="Martial Art" value={formData['martialArt']} onChange={handleChange}>
-                <Select placeholder="Select martial art">
+              <FormControl label="Martial Art">
+                <Select
+                  placeholder="Select martial art"
+                  value={formData.martialArt}
+                  onChange={(e) => setFormData({ ...formData, martialArt: e.target.value })}>
                   <option value="Boxing">Boxing</option>
                   <option value="Capoeira">Capoeira</option>
                   <option value="Wrestling">Wrestling</option>
@@ -184,18 +187,20 @@ export default function Mint() {
                   <option value="MuaiThai">Muai Thai</option>
                 </Select>
               </FormControl>
-
               <br />
-              <FormControl label="Skin" name="skin" value={formData['skin']} onChange={handleChange}>
-                <Select placeholder="Select skin">
+              <FormControl label="Skin">
+                <Select placeholder="Select skin" value={formData.skin} onChange={(e) => setFormData({ ...formData, skin: e.target.value })}>
                   <option value="Caucasian">Caucasian</option>
                   <option value="DarkSkinned">Dark</option>
                   <option value="Asian">Asian</option>
                 </Select>
               </FormControl>
               <br />
-              <FormControl label="Hair Style" name="hairStyle" value={formData['hairStyle']} onChange={handleChange}>
-                <Select placeholder="Select hair style">
+              <FormControl label="Hair Style">
+                <Select
+                  placeholder="Select hair style"
+                  value={formData.hairStyle}
+                  onChange={(e) => setFormData({ ...formData, hairStyle: e.target.value })}>
                   <option value="Bald">Bald</option>
                   <option value="Short">Short</option>
                   <option value="Long">Long</option>
@@ -203,8 +208,11 @@ export default function Mint() {
                 </Select>
               </FormControl>
               <br />
-              <FormControl label="Hair Color" name="hairColor" value={formData['hairColor']} onChange={handleChange}>
-                <Select placeholder="Select hair color">
+              <FormControl label="Hair Color">
+                <Select
+                  placeholder="Select hair color"
+                  value={formData.hairColor}
+                  onChange={(e) => setFormData({ ...formData, hairColor: e.target.value })}>
                   <option value="Black">Black</option>
                   <option value="Blonde">Blonde</option>
                   <option value="Brown">Brown</option>
