@@ -23,8 +23,16 @@ import {
   useTheme,
 } from '@chakra-ui/react'
 
-export const FighterCard = ({ fighter, user }: { fighter: any; user: any }) => {
-  const [myFighterStats, setMyFighterStats] = useState<{ strength: number; stamina: number; technique: number; rarity: number; victories: number }>({
+export interface FighterCardProps {
+  strength: number
+  stamina: number
+  technique: number
+  rarity: number
+  victories: number
+}
+
+export const FighterCard = ({ fighter }: { fighter: any }) => {
+  const [myFighterStats, setMyFighterStats] = useState<FighterCardProps>({
     strength: 0,
     stamina: 0,
     technique: 0,

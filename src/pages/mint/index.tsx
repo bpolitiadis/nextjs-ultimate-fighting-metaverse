@@ -23,7 +23,7 @@ export default function Mint() {
 
   // const [images, setImages] = useState<ImagesResponseDataInner[]>([])
   const [tokenUrl, setTokenUrl] = useState('')
-  const debouncedTokenId = useDebounce(tokenUrl, 500)
+  // const debouncedTokenId = useDebounce(tokenUrl, 500)
 
   const [base64String, setBase64String] = useState('')
   const [imagesBinaryData, setImagesBinaryData] = useState<ImagesResponseDataInner[]>([])
@@ -44,17 +44,11 @@ export default function Mint() {
     Hair Style - ${formData['hairStyle']}
     Hair Color - ${formData['hairColor']}
   `
-  // Character has to be an ${formData['skin']} skinned ${formData['gender']}
-  // with ${formData['hairColor']} hair and a ${formData['hairStyle']} hair style.
-  // Character has to be in the ${formData['weightClass']} weight class division.
-  // Art style: Digital Anime Art
+  const [text, setText] = useState(textPrompt)
 
-  //   const textPrompt = `
-  //   Create a high-resolution (8k or higher) digital avatar of a ${formData['gender']}, ${formData['skin']} skinned human character for a fighting martial arts video game,
-  //   Character should have ${formData['hairStyle']} ${formData['hairColor']} hair and be depicted in a action pose. Fighter should be a master ${formData['martialArt']} martial artist.
-  //   The background should be simplistic and without letters, numbers, or symbols.
-  //   The image should be visually striking and dynamic, with a polished finish.
-  // `
+  useEffect(() => {
+    setText(textPrompt)
+  }, [formData, textPrompt])
 
   const oai = useRef(
     new OpenAIApi(
@@ -67,9 +61,10 @@ export default function Mint() {
 
   const create = async () => {
     console.log(textPrompt)
+    console.log(text)
     try {
       const response = await oai.current.createImage({
-        prompt: textPrompt,
+        prompt: text,
         n: 2,
         size: '256x256',
         response_format: 'b64_json',
@@ -89,8 +84,8 @@ export default function Mint() {
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address,
     abi: abi,
     functionName: 'safeMint',
-    args: [debouncedTokenId.toString()],
-    enabled: Boolean(debouncedTokenId),
+    args: [tokenUrl.toString()],
+    enabled: !tokenUrl,
     overrides: {
       value: ethers.utils.parseEther('0.01'),
     },
@@ -191,7 +186,7 @@ export default function Mint() {
               <FormControl label="Skin">
                 <Select placeholder="Select skin" value={formData.skin} onChange={(e) => setFormData({ ...formData, skin: e.target.value })}>
                   <option value="Caucasian">Caucasian</option>
-                  <option value="DarkSkinned">Dark</option>
+                  <option value="Dark">Dark</option>
                   <option value="Asian">Asian</option>
                 </Select>
               </FormControl>
@@ -253,7 +248,8 @@ export default function Mint() {
                     </label>
                   ))}
               </div> */}
-              <Button disabled={!write || isLoading} onClick={mint} variant="contained" className={css.Button}>
+              {/* <Button disabled={!write || isLoading} onClick={mint} variant="contained" className={css.Button}> */}
+              <Button disabled={!write && !isLoading} onClick={mint} variant="contained" className={css.Button}>
                 {isLoading ? 'Minting...' : 'Mint'}
               </Button>
             </div>
