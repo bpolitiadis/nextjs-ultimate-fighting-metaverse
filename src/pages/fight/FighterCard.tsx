@@ -149,3 +149,5 @@ export const FighterCard = ({ fighter }: { fighter: any }) => {
     </Flex>
   )
 }
+
+export default FighterCard
