@@ -1,5 +1,5 @@
 import styles from 'styles/Home.module.css'
-import { Flex, Box, Image, Heading, Text, Link } from '@chakra-ui/react'
+import { Flex, Box, Image, Heading, Text, Link, Center } from '@chakra-ui/react'
 import { Head } from 'components/layout/Head'
 import { SITE_DESCRIPTION, SITE_NAME } from 'utils/config'
 
@@ -11,12 +11,9 @@ export default function Home() {
 
   return (
     <>
-      <Head>
-        <title>Ultimate Fighting Metaverse</title>
-      </Head>
       <Box px={6} py={8}>
-        <Flex mx="auto" align="center" justify="space-between">
-          <Heading as="h1" size="xl">
+        <Flex mx="auto" align="center" justify="center">
+          <Heading as="h1" size="xl" textAlign="center" justifyContent="center">
             Welcome to Ultimate Fighting Metaverse
           </Heading>
         </Flex>
@@ -29,14 +26,14 @@ export default function Home() {
         <Flex mt={6} align="center">
           <Image src={images[0]} alt="fighter character" mr={6} w="80%" h="80%" />
           <Text className="large-font">
-            Are you ready to create your own unstoppable warrior? With just a few clicks, you can customize your fighter's appearance and let our AI
-            art wizard, DALL-e, bring your creation to life.
+            Are you ready to create your own unstoppable warrior? With just a few clicks, you can customize your fighter`&apos;`s appearance and let
+            our AI art wizard, DALL-e, bring your creation to life.
           </Text>
         </Flex>
         <Flex mt={6} align="center">
           <Text mr={6} className="large-font">
-            But the fun doesn't stop there - your fighter's stats and rarity are determined by the roll of the dice, so to speak. Will you be the
-            proud owner of a rare and powerful champion, or will you have to train and grind your way to the top?
+            But the fun doesn`&apos;`t stop there - your fighter`&apos;`s stats and rarity are determined by the roll of the dice, so to speak. Will
+            you be the proud owner of a rare and powerful champion, or will you have to train and grind your way to the top?
           </Text>
           <Image src={images[1]} alt="DALL-e AI art wizard" w="60%" h="60%" />
         </Flex>
