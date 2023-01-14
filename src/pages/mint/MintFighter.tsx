@@ -6,4 +6,6 @@ import css from '../../styles/mint.module.css'
 import { NFTStorage, File, Blob } from 'nft.storage'
 import { Address, readContract } from '@wagmi/core'
 
-export default function MintFighter() {}
+export default function MintFighter() {
+  return <div></div>
+}
