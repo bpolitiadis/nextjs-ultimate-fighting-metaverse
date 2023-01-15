@@ -26,14 +26,14 @@ export default function Home() {
         <Flex mt={6} align="center">
           <Image src={images[0]} alt="fighter character" mr={6} w="80%" h="80%" />
           <Text className="large-font">
-            Are you ready to create your own unstoppable warrior? With just a few clicks, you can customize your fighter`&apos;`s appearance and let
-            our AI art wizard, DALL-e, bring your creation to life.
+            Are you ready to create your own unstoppable warrior? With just a few clicks, you can customize your fighter&apos;s appearance and let our
+            AI art wizard, DALL-e, bring your creation to life.
           </Text>
         </Flex>
         <Flex mt={6} align="center">
           <Text mr={6} className="large-font">
-            But the fun doesn`&apos;`t stop there - your fighter`&apos;`s stats and rarity are determined by the roll of the dice, so to speak. Will
-            you be the proud owner of a rare and powerful champion, or will you have to train and grind your way to the top?
+            But the fun doesn&apos;t stop there - your fighter &apos; s stats and rarity are determined by the roll of the dice, so to speak. Will you
+            be the proud owner of a rare and powerful champion, or will you have to train and grind your way to the top?
           </Text>
           <Image src={images[1]} alt="DALL-e AI art wizard" w="60%" h="60%" />
         </Flex>

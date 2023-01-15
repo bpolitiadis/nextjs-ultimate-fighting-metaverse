@@ -88,7 +88,7 @@ export default function Fight() {
             {
               //Check if myFighterIds is empty
               myFighterIds.length === 0 ? (
-                <Text>You don`&apos;`t own any fighters yet. Go to the Marketplace to buy one!</Text>
+                <Text>You don&apos;t own any fighters yet. Go to the Marketplace to buy one!</Text>
               ) : (
                 myFighterIds.map((id) => (
                   <FighterCard key={id} fighter={id} isSelected={id === selectedFighterId} onClick={() => setSelectedFighterId(id)} />
