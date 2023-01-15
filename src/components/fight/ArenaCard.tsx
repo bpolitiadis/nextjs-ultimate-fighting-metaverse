@@ -69,7 +69,9 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
   return (
     <Card>
       <CardBody>
-        <Text>Match ID: {arenaId}</Text>
+        <Text align="center" fontSize="2xl" fontFamily="fantasy" fontStyle="oblique">
+          Arena #{arenaId}
+        </Text>
         <Box display="flex" alignItems="center" justifyContent="center">
           {/* get arena1 image from public folder */}
           <Image

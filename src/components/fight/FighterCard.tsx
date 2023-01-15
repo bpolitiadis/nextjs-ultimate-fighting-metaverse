@@ -116,8 +116,8 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
         minWidth="250px"
         maxWidth="250px"
         rounded="lg"
-        borderWidth="2px"
-        borderColor={isSelected ? 'blue.500' : 'gray.200'}
+        borderWidth={isSelected ? '2px' : '1px'}
+        borderColor={isSelected ? 'white' : 'blue.800'}
         onClick={() => onClick(fighter)}>
         <CardHeader>
           <Heading as="h3" size="md">
