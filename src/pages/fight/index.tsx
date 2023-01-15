@@ -4,8 +4,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Address, useAccount, useContractRead, usePrepareContractWrite } from 'wagmi'
 import abi from '../../../constants/abi.json'
 import css from '../../styles/fight.module.css'
-import { FighterCard } from './FighterCard'
-import { ArenaCard, ArenaCardProps } from './ArenaCard'
+import { FighterCard } from '../../components/fight/FighterCard'
+import { ArenaCard, ArenaCardProps } from '../../components/fight/ArenaCard'
 
 export default function Fight() {
   const { address: user, isConnecting, isDisconnected, isConnected } = useAccount()

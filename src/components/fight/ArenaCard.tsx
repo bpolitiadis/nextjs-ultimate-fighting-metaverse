@@ -51,5 +51,3 @@ export const ArenaCard = ({ arenaId, arena }: { arenaId: number; arena: ArenaCar
     </Card>
   )
 }
-
-export default ArenaCard
