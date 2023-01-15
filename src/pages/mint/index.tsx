@@ -3,9 +3,9 @@ import { Head } from 'components/layout/Head'
 import React, { useEffect, useRef, useState } from 'react'
 import { Configuration, ImagesResponseDataInner, OpenAIApi } from 'openai'
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
+import { ethers } from 'ethers'
 import abi from '../../../constants/abi.json'
 import css from '../../styles/mint.module.css'
-import { ethers } from 'ethers'
 import { NFTStorage, File, Blob } from 'nft.storage'
 import { Address, readContract } from '@wagmi/core'
 import axios from 'axios'
@@ -32,18 +32,21 @@ export default function Mint() {
   const NFT_STORAGE_TOKEN = process.env.NEXT_PUBLIC_NFTSTORAGE
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN as string })
 
+  // Picture a powerful martial artist, with [skin tone] skin, [hair style] hair, and [hair color] tresses, fiercely performing a [fighting style] move in front of a mesmerizing abstract background, with no letters or numbers.
+  // Detailed matte painting, deep color, fantastical, 8k resolution, trending on Artstation Unreal Engine 5, epic cinematic, brilliant stunning, intricate meticulously detailed, dramatic atmospheric, maximalist digital matte painting, perfect comic book art, smooth Mark Brooks and Dan Mumford style.
+
   //Design a full-body 8k+ digital avatar of a female character for a video game with dark skin and brown hair styled in braids. The character should be shown in a futuristic fighting style inspired by muay thai and set against a simple, symbol-free background. The image should be visually striking and dynamic with a polished finish.
   const textPrompt = `
-    High resolution 8k+ digital avatar of a human martial artist video game character.
+    High resolution 8k+ digital avatar of a futuristic human martial artist.
     Background should be simplistic and without letters, numbers, or symbols.
-    Character has to be in an action pose with bold lines and a polished finish.
+    Character has to be muscular in an action fighting pose with bold lines and a polished finish.
     Character is a ${formData['martialArt']} master.
-    External characteristics:
+    External appearance characteristics:
     Gender - ${formData['gender']}
     Skin - ${formData['skin']}
     Hair Style - ${formData['hairStyle']}
     Hair Color - ${formData['hairColor']}
-  `
+    detailed matte painting, deep color, fantastical, intricate detail, splash screen, complementary colors, fantasy concept art, 8k resolution trending on Artstation Unreal Engine 5  `
   const [text, setText] = useState(textPrompt)
 
   useEffect(() => {
@@ -84,8 +87,8 @@ export default function Mint() {
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address,
     abi: abi,
     functionName: 'safeMint',
-    args: [tokenUrl.toString()],
-    enabled: !tokenUrl,
+    args: [tokenUrl],
+    enabled: Boolean(tokenUrl),
     overrides: {
       value: ethers.utils.parseEther('0.01'),
     },
@@ -95,13 +98,20 @@ export default function Mint() {
 
   const { isLoading, isSuccess } = useWaitForTransaction({
     hash: data?.hash,
+    onSuccess: () => {
+      console.log('Minted!')
+      console.log(data)
+    },
+    onError: (err) => {
+      console.error(err)
+    },
   })
 
   const mint = async () => {
     try {
       const imageFile = new File([selectedImage], 'UFM-12345.png', { type: 'image/png' })
-      const someData = new Blob([selectedImage])
-      const cid = await client.storeBlob(someData)
+      // const someData = new Blob([selectedImage])
+      // const cid = await client.storeBlob(someData)
       // console.log(cid)
 
       const metadata = await client.store({
@@ -109,8 +119,8 @@ export default function Mint() {
         description: 'Ultimate Fighting Metaverse NFT Fighter',
         image: imageFile,
         imageBase64: selectedImage,
-        blobURI: 'ipfs://' + cid,
-        gatewayURI: 'https://ipfs.io/ipfs/' + cid,
+        // blobURI: 'ipfs://' + cid,
+        // gatewayURI: 'https://ipfs.io/ipfs/' + cid,
         properties: {
           tokenID: '12345',
           martialArt: formData['martialArt'],
@@ -122,14 +132,13 @@ export default function Mint() {
       })
 
       console.log(metadata)
-      console.log(metadata.url)
+      console.log('Response from IPFS: ' + metadata.url)
       // console.log(metadata.data.imageBase64)
       setBase64String(metadata.data.imageBase64)
       setTokenUrl(metadata.url)
+      console.log('tokenURI : ' + tokenUrl)
 
       write?.()
-      console.log('Minted!')
-      console.log(data)
     } catch (error) {
       console.error(error)
     }
@@ -216,7 +225,7 @@ export default function Mint() {
                 </Select>
               </FormControl>
               <br />
-              <Button onClick={create} variant="contained" className={css.Button}>
+              <Button onClick={create} variant="outline" width="400px" colorScheme="green" backgroundColor="green" className={css.Button}>
                 Generate
               </Button>
             </div>
@@ -235,22 +244,15 @@ export default function Mint() {
                     </label>
                   ))}
               </div>
-              {/* <div className={css.imagesContainer}>
-                {images.length > 0 &&
-                  images.map((img) => (
-                    <label key={img.url}>
-                      <input
-                        type="radio"
-                        value={img.url}
-                        checked={img.url === selectedImage}
-                        onChange={(event) => setSelectedImage(event.target.value)}
-                      />
-                      <Image className={css.image} src={img.url} alt="Dall-e" />
-                    </label>
-                  ))}
-              </div> */}
               {/* <Button disabled={!write || isLoading} onClick={mint} variant="contained" className={css.Button}> */}
-              <Button disabled={!write && !isLoading} onClick={mint} variant="contained" className={css.Button}>
+              <Button
+                disabled={!write && isLoading}
+                onClick={mint}
+                variant="outline"
+                width="400px"
+                colorScheme="green"
+                backgroundColor="green"
+                className={css.Button}>
                 {isLoading ? 'Minting...' : 'Mint'}
               </Button>
             </div>

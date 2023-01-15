@@ -21,6 +21,7 @@ import {
   ModalHeader,
   ModalCloseButton,
   useTheme,
+  Button,
 } from '@chakra-ui/react'
 
 export interface FighterCardProps {
@@ -31,7 +32,7 @@ export interface FighterCardProps {
   victories: number
 }
 
-export const FighterCard = ({ fighter }: { fighter: any }) => {
+export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; isSelected: boolean; onClick: any }) => {
   const [myFighterStats, setMyFighterStats] = useState<FighterCardProps>({
     strength: 0,
     stamina: 0,
@@ -105,46 +106,58 @@ export const FighterCard = ({ fighter }: { fighter: any }) => {
   }, [tokenUrl])
 
   const ipfsGatewayReplace = (url: string) => {
+    console.log('url: ' + url)
     return url.replace(/^ipfs:\/\//, 'https://ipfs.io/ipfs/')
   }
 
   return (
     <Flex width={['85%', '80%', '75%']} mx="auto" my={4}>
-      <Card minWidth="250px" maxWidth="250px" borderWidth="1px" rounded="lg" boxShadow="md" onClick={onOpen}>
+      <Card
+        minWidth="250px"
+        maxWidth="250px"
+        rounded="lg"
+        borderWidth="2px"
+        borderColor={isSelected ? 'blue.500' : 'gray.200'}
+        onClick={() => onClick(fighter)}>
         <CardHeader>
-          <Heading size="md"># {fighter}</Heading>
+          <Heading as="h3" size="md">
+            Fighter #{fighter}
+          </Heading>
         </CardHeader>
         <CardBody>
-          <Image src={`data:image/png;base64,${myFighterImageBase64}`} alt={myFighterTokenId} objectFit="cover" />
-          <Stack divider={<StackDivider />} spacing="2">
+          <Stack>
+            <Image src={`data:image/png;base64,${myFighterImageBase64}`} alt={myFighterTokenId} objectFit="cover" />
+            <StackDivider />
             <Box>
-              <Text>Strength: {myFighterStats.strength}</Text>
-              <Text>Stamina: {myFighterStats.stamina}</Text>
-              <Text>Technique: {myFighterStats.technique}</Text>
-              <Text>Rarity: {myFighterStats.rarity}</Text>
-              <Text>Victories: {myFighterStats.victories}</Text>
+              <Text>
+                Strength: {myFighterStats.strength} | Stamina: {myFighterStats.stamina} | Technique: {myFighterStats.technique}{' '}
+              </Text>
+              <Text>
+                Rarity: {myFighterStats.rarity} | Victories: {myFighterStats.victories}
+              </Text>
             </Box>
           </Stack>
         </CardBody>
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Fighter Info</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <Image src={`data:image/png;base64,${myFighterImageBase64}`} alt={myFighterTokenId} objectFit="cover" w="100%" />
-              <Stack divider={<StackDivider />} spacing="2">
-                <Box>
-                  <Text>Strength: {myFighterStats.strength}</Text>
-                  <Text>Stamina: {myFighterStats.stamina}</Text>
-                  <Text>Technique: {myFighterStats.technique}</Text>
-                  <Text>Rarity: {myFighterStats.rarity}</Text>
-                  <Text>Victories: {myFighterStats.victories}</Text>
-                </Box>
-              </Stack>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
+        <CardFooter>
+          <Button onClick={onOpen}>Details</Button>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Fighter #{fighter}</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Text>
+                  Strength: {myFighterStats.strength} | Stamina: {myFighterStats.stamina} | Technique: {myFighterStats.technique}{' '}
+                </Text>
+                <Text>
+                  Rarity: {myFighterStats.rarity} | Victories: {myFighterStats.victories}
+                </Text>
+                <Text>Token ID: {myFighterTokenId}</Text>
+                <Image src={myFighterImage} alt={`Fighter #${fighter}`} rounded="md" />
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+        </CardFooter>
       </Card>
     </Flex>
   )

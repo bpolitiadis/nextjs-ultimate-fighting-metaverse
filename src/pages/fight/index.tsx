@@ -12,6 +12,7 @@ export default function Fight() {
 
   const [myFighterIds, setMyFighterIds] = useState<Array<number>>([])
   const [arenas, setArenas] = useState<Array<ArenaCardProps>>([])
+  const [selectedFighterId, setSelectedFighterId] = useState<number>(0)
 
   const {
     data: fighterData,
@@ -89,7 +90,9 @@ export default function Fight() {
               myFighterIds.length === 0 ? (
                 <Text>You don`&apos;`t own any fighters yet. Go to the Marketplace to buy one!</Text>
               ) : (
-                myFighterIds.map((fighterId) => <FighterCard key={fighterId} fighter={fighterId} />)
+                myFighterIds.map((id) => (
+                  <FighterCard key={id} fighter={id} isSelected={id === selectedFighterId} onClick={() => setSelectedFighterId(id)} />
+                ))
               )
             }
           </SimpleGrid>
@@ -98,16 +101,13 @@ export default function Fight() {
           <Heading>Arenas</Heading>
           <Text>Here are the arenas you can fight in.</Text>
           {/* <Text>All arena data : {JSON.stringify(arenas)}</Text> */}
-
-          <Flex align="center" justify="center" direction="column">
-            <SimpleGrid columns={4} spacing={5}>
-              {arenas.map((arena, index) => (
-                <Box p={4} key={index}>
-                  <ArenaCard key={index} arenaId={index} arena={arenas[index]} />
-                </Box>
-              ))}
-            </SimpleGrid>
-          </Flex>
+          <SimpleGrid columns={4} spacing={5}>
+            {arenas.map((arena, index) => (
+              <Box p={4} key={index}>
+                <ArenaCard key={index} arenaId={index + 1} arena={arenas[index]} selectedFighter={selectedFighterId} />
+              </Box>
+            ))}
+          </SimpleGrid>
         </div>
       </main>
     </>
