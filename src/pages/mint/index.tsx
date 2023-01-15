@@ -32,21 +32,8 @@ export default function Mint() {
   const NFT_STORAGE_TOKEN = process.env.NEXT_PUBLIC_NFTSTORAGE
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN as string })
 
-  // Picture a powerful martial artist, with [skin tone] skin, [hair style] hair, and [hair color] tresses, fiercely performing a [fighting style] move in front of a mesmerizing abstract background, with no letters or numbers.
-  // Detailed matte painting, deep color, fantastical, 8k resolution, trending on Artstation Unreal Engine 5, epic cinematic, brilliant stunning, intricate meticulously detailed, dramatic atmospheric, maximalist digital matte painting, perfect comic book art, smooth Mark Brooks and Dan Mumford style.
+  const textPrompt = `Create a stunning, maximalist digital matte painting of an epic cinematic martial arts avatar, perfect for the comic book art style, in 8K resolution, utilizing the latest trends on ArtStation and Unreal Engine 5. The avatar should be ${formData['gender']}, ${formData['skin']} skinned, with ${formData['hairStyle']} and ${formData['hairColor']} hair, proficient in ${formData['martialArt']}, and with an intricate, meticulously detailed background that has no letters or numbers,  and is smooth, reminiscent of the styles of Mark Brooks and Dan Mumford.`
 
-  //Design a full-body 8k+ digital avatar of a female character for a video game with dark skin and brown hair styled in braids. The character should be shown in a futuristic fighting style inspired by muay thai and set against a simple, symbol-free background. The image should be visually striking and dynamic with a polished finish.
-  const textPrompt = `
-    High resolution 8k+ digital avatar of a futuristic human martial artist.
-    Background should be simplistic and without letters, numbers, or symbols.
-    Character has to be muscular in an action fighting pose with bold lines and a polished finish.
-    Character is a ${formData['martialArt']} master.
-    External appearance characteristics:
-    Gender - ${formData['gender']}
-    Skin - ${formData['skin']}
-    Hair Style - ${formData['hairStyle']}
-    Hair Color - ${formData['hairColor']}
-    detailed matte painting, deep color, fantastical, intricate detail, splash screen, complementary colors, fantasy concept art, 8k resolution trending on Artstation Unreal Engine 5  `
   const [text, setText] = useState(textPrompt)
 
   useEffect(() => {
@@ -63,7 +50,6 @@ export default function Mint() {
   )
 
   const create = async () => {
-    console.log(textPrompt)
     console.log(text)
     try {
       const response = await oai.current.createImage({
