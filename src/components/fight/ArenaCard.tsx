@@ -4,6 +4,7 @@ import abi from '../../../constants/abi.json'
 
 import { Card, CardHeader, CardBody, CardFooter, Heading, Stack, Box, StackDivider, Text, Image, Flex, Button, Spacer } from '@chakra-ui/react'
 import Fight from 'pages/fight'
+import { ethers } from 'ethers'
 
 export interface ArenaCardProps {
   matchId: number
@@ -39,6 +40,9 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
     functionName: 'joinArena',
     args: [arenaId, selectedFighter],
     enabled: Boolean(arenaId) && Boolean(selectedFighter),
+    overrides: {
+      value: ethers.utils.parseEther('0.01'),
+    },
   })
 
   const { data, error, isError, write } = useContractWrite(config)
