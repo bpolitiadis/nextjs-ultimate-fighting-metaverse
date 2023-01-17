@@ -13,6 +13,7 @@ export default function Fight() {
   const [myFighterIds, setMyFighterIds] = useState<Array<number>>([])
   const [arenas, setArenas] = useState<Array<ArenaCardProps>>([])
   const [selectedFighterId, setSelectedFighterId] = useState<number>(0)
+  const [numColumns, setNumColumns] = useState(4)
 
   const {
     data: fighterData,
@@ -67,6 +68,21 @@ export default function Fight() {
     }
   }, [arenaData])
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setNumColumns(2)
+      } else {
+        setNumColumns(4)
+      }
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
   return (
     <>
       <Head />
@@ -84,17 +100,14 @@ export default function Fight() {
               Congratulations! You own {myFighterIds.length} Ultimate Fighters: {myFighterIds.toString()}
             </Text> */}
           <Text>Here are the fighters you own. Select one to fight!</Text>
-          <SimpleGrid minChildWidth="120px" spacing="16px" className={css.myFighters}>
-            {
-              //Check if myFighterIds is empty
-              myFighterIds.length === 0 ? (
-                <Text>You don&apos;t own any fighters yet. Go to the Marketplace to buy one!</Text>
-              ) : (
-                myFighterIds.map((id) => (
-                  <FighterCard key={id} fighter={id} isSelected={id === selectedFighterId} onClick={() => setSelectedFighterId(id)} />
-                ))
-              )
-            }
+          <SimpleGrid minChildWidth="120px" spacing="16px" gridTemplateColumns={`repeat(${numColumns}, 1fr)`}>
+            {myFighterIds.length === 0 ? (
+              <Text>You don&apos;t own any fighters yet. Go to the Marketplace to buy one!</Text>
+            ) : (
+              myFighterIds.map((id) => (
+                <FighterCard key={id} fighter={id} isSelected={id === selectedFighterId} onClick={() => setSelectedFighterId(id)} />
+              ))
+            )}
           </SimpleGrid>
           <Spacer />
           <Spacer />
