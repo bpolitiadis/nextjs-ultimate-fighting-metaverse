@@ -94,7 +94,9 @@ export default function Fight() {
           do this!
         </Text> */}
         <div className={css.container}>
-          <Heading as="h3">My Fighters</Heading>
+          <Heading as="h3" fontFamily="fantasy">
+            My Fighters
+          </Heading>
           <Text>Hi {user} !</Text>
           {/* <Text>
               Congratulations! You own {myFighterIds.length} Ultimate Fighters: {myFighterIds.toString()}
@@ -111,7 +113,9 @@ export default function Fight() {
           </SimpleGrid>
           <Spacer />
           <Spacer />
-          <Heading>Arenas</Heading>
+          <Heading as="h3" fontFamily="fantasy">
+            Arenas
+          </Heading>
           <Text>Here are the arenas you can fight in.</Text>
           {/* <Text>All arena data : {JSON.stringify(arenas)}</Text> */}
           <SimpleGrid columns={4} spacing={5}>

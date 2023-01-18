@@ -72,10 +72,11 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
 
   return (
     <Card>
-      <CardBody>
+      <CardBody textAlign="center" rounded="lg" borderWidth={'1px'} borderColor={'gray.200'}>
         <Text align="center" fontSize="2xl" fontFamily="fantasy" fontStyle="oblique">
           Arena #{arenaId}
         </Text>
+        <Spacer m="4px" />
         <Box display="flex" alignItems="center" justifyContent="center">
           {/* get arena1 image from public folder */}
           <Image
@@ -89,11 +90,12 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
             maxH="100px"
             objectFit="contain"></Image>
         </Box>
-        <Spacer m={4} />
+        <Spacer m="8px" />
         <Flex justifyContent="space-between" flexDirection="row">
           <Text>Fighter 1: {arena.tokenId1}</Text>
           <Text>Fighter 2: {arena.tokenId2}</Text>
         </Flex>
+        <Spacer m="4px" />
         <Button
           colorScheme="blue"
           variant="outline"

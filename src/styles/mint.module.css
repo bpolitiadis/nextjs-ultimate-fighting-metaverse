@@ -22,8 +22,7 @@
   /* width: 500px; */
   padding: 20px;
   margin: 20px;
-  border-color: aquamarine;
-  border-width: 1px;
+  /* border-width: 1px; */
 }
 
 .selectionMenu > * {
@@ -38,13 +37,12 @@
   /* width: 500px; */
   padding: 20px;
   margin: 20px;
-  border-color: aquamarine;
-  border-width: 1px;
+  /* border-width: 1px; */
 }
 
 .imagesContainer {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: 'row wrap';
   justify-content: space-between;
   align-items: center;
   /* width: 500px; */
@@ -52,7 +50,7 @@
   margin: 20px;
 }
 .imagesContainer > * {
-  width: 50%;
+  width: 100%;
 }
 
 .image {

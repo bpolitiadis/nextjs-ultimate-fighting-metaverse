@@ -1,4 +1,4 @@
-import { Heading, Text, Button, MenuItem, FormControl, Select, Image, Container } from '@chakra-ui/react'
+import { Heading, Text, Button, MenuItem, FormControl, Select, Image, Container, Spacer } from '@chakra-ui/react'
 import { Head } from 'components/layout/Head'
 import React, { useEffect, useRef, useState } from 'react'
 import { Configuration, ImagesResponseDataInner, OpenAIApi } from 'openai'
@@ -6,11 +6,8 @@ import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from
 import { ethers } from 'ethers'
 import abi from '../../../constants/abi.json'
 import css from '../../styles/mint.module.css'
-import { NFTStorage, File, Blob } from 'nft.storage'
 import { Address, readContract } from '@wagmi/core'
-import axios from 'axios'
 import { useDebounce } from 'usehooks-ts'
-import { useMenuItem } from '@chakra-ui/menu'
 import CreateFighter from 'components/mint/CreateFighter'
 import MintFighter from 'components/mint/MintFighter'
 
@@ -38,6 +35,7 @@ export default function Mint() {
         <Container className={css.root}>
           <Container className={css.container}>
             <CreateFighter setImagesBinaryData={setImagesBinaryData} />
+            <Spacer m="16px" />
             <MintFighter imagesBinaryData={imagesBinaryData} />
             <br />
           </Container>

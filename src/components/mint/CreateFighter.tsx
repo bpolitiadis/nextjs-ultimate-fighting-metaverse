@@ -38,7 +38,7 @@ export default function CreateFighter({
     try {
       const response = await oai.current.createImage({
         prompt: text,
-        n: 2,
+        n: 4,
         size: '256x256',
         response_format: 'b64_json',
       })
@@ -110,7 +110,7 @@ export default function CreateFighter({
         </Select>
       </FormControl>
       <Spacer m="16px" />
-      <Button onClick={create} variant="outline" width="400px" colorScheme="green" backgroundColor="green" className={css.Button}>
+      <Button onClick={create} variant="outline" width="400px" colorScheme="green">
         Generate
       </Button>
     </Container>

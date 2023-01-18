@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Heading, Text, Button, MenuItem, FormControl, Select, Image, Container, Flex } from '@chakra-ui/react'
+import { Heading, Text, Button, MenuItem, FormControl, Select, Image, Container, Flex, Box, Grid, SimpleGrid } from '@chakra-ui/react'
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
 import abi from '../../../constants/abi.json'
 import css from '../../styles/mint.module.css'
@@ -17,6 +17,7 @@ export default function MintFighter({
 }) {
   const [selectedImage, setSelectedImage] = useState('')
   const [tokenUrl, setTokenUrl] = useState('')
+  const [selectedImageIndex, setSelectedImageIndex] = useState(-1)
 
   const NFT_STORAGE_TOKEN = process.env.NEXT_PUBLIC_NFTSTORAGE
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN as string })
@@ -94,27 +95,28 @@ export default function MintFighter({
 
   return (
     <Container className={css.mintContainer}>
-      <Flex justifyContent="space-between" className={css.imagesContainer}>
+      <Flex justifyContent="space-between" flexFlow="row" m="4px" flexWrap="wrap" className={css.imagesContainer}>
         {imagesBinaryData.length > 0 &&
-          imagesBinaryData.map((img) => (
-            <label key={img.b64_json}>
-              <input
-                type="radio"
-                value={img.b64_json}
-                checked={img.b64_json === selectedImage}
-                onChange={(event) => setSelectedImage(event.target.value)}
-              />
-              <Image className={css.image} src={`data:image/png;base64,${img.b64_json}`} alt="Dall-e" />
-            </label>
+          imagesBinaryData.map((img, index) => (
+            <Box
+              key={img.b64_json}
+              borderWidth={selectedImageIndex === index ? '2px' : '1px'}
+              borderColor={selectedImageIndex === index ? 'blue.500' : 'gray.300'}
+              m="4px"
+              onClick={() => {
+                setSelectedImage(img.b64_json as string)
+                setSelectedImageIndex(index)
+              }}>
+              <Image alt="" className={css.imageContainer} src={`data:image/png;base64,${img.b64_json}`} />
+            </Box>
           ))}
       </Flex>
       <Button
-        disabled={!write && isLoading}
+        disabled={!write && isLoading && selectedImageIndex === -1}
         onClick={mint}
         variant="outline"
         width="400px"
         colorScheme="green"
-        backgroundColor="green"
         className={css.Button}>
         {isLoading ? 'Minting...' : 'Mint'}
       </Button>

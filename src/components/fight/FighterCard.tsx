@@ -22,7 +22,10 @@ import {
   ModalCloseButton,
   useTheme,
   Button,
+  Container,
+  ThemeProvider,
 } from '@chakra-ui/react'
+import { ThemeContext } from '@emotion/react'
 
 export interface FighterCardProps {
   strength: number
@@ -30,6 +33,13 @@ export interface FighterCardProps {
   technique: number
   rarity: number
   victories: number
+}
+
+export const Rarities: any = {
+  0: 'Common',
+  1: 'Uncommon',
+  2: 'Rare',
+  3: 'Legendary',
 }
 
 export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; isSelected: boolean; onClick: any }) => {
@@ -117,43 +127,54 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
         maxWidth="250px"
         rounded="lg"
         borderWidth={isSelected ? '2px' : '1px'}
-        borderColor={isSelected ? 'white' : 'blue.800'}
+        borderColor={isSelected ? 'blue.200' : 'gray.200'}
         onClick={() => onClick(fighter)}>
         <CardHeader>
-          <Heading as="h3" size="md">
+          <Text align="center" fontSize="2xl" fontFamily="fantasy" fontStyle="oblique">
             Fighter #{fighter}
-          </Heading>
+          </Text>
         </CardHeader>
-        <CardBody>
+        <CardBody textAlign="center">
           <Stack>
-            <Image src={`data:image/png;base64,${myFighterImageBase64}`} alt={myFighterTokenId} objectFit="cover" />
+            <Image borderRadius="md" src={`data:image/png;base64,${myFighterImageBase64}`} alt={myFighterTokenId} objectFit="cover" />
             <StackDivider />
             <Box>
+              <Text>Rarity: {Rarities[myFighterStats.rarity]}</Text>
               <Text>
                 Strength: {myFighterStats.strength} | Stamina: {myFighterStats.stamina} | Technique: {myFighterStats.technique}{' '}
               </Text>
-              <Text>
-                Rarity: {myFighterStats.rarity} | Victories: {myFighterStats.victories}
-              </Text>
+              <Text>Victories: {myFighterStats.victories}</Text>
             </Box>
           </Stack>
         </CardBody>
         <CardFooter>
-          <Button onClick={onOpen}>Details</Button>
+          <Button colorScheme="blue" variant="outline" size="sm" onClick={onOpen}>
+            Details
+          </Button>
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>Fighter #{fighter}</ModalHeader>
+            <ModalContent textAlign="center">
+              <ModalHeader fontFamily="fantasy" fontStyle="oblique">
+                Fighter #{fighter}
+              </ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <Text>
-                  Strength: {myFighterStats.strength} | Stamina: {myFighterStats.stamina} | Technique: {myFighterStats.technique}{' '}
-                </Text>
-                <Text>
-                  Rarity: {myFighterStats.rarity} | Victories: {myFighterStats.victories}
-                </Text>
-                <Text>Token ID: {myFighterTokenId}</Text>
-                <Image src={myFighterImage} alt={`Fighter #${fighter}`} rounded="md" />
+                <Container>
+                  <Image
+                    display="block"
+                    margin="auto"
+                    borderRadius="md"
+                    src={`data:image/png;base64,${myFighterImageBase64}`}
+                    alt={`Fighter #${fighter}`}
+                    rounded="md"
+                  />
+                  <Text>Token ID: {fighter}</Text>
+                  <Text>Rarity: {Rarities[myFighterStats.rarity]}</Text>
+                  <Text>
+                    Strength: {myFighterStats.strength} | Stamina: {myFighterStats.stamina} | Technique: {myFighterStats.technique}{' '}
+                  </Text>
+                  <Text>Victories: {myFighterStats.victories}</Text>
+                </Container>
               </ModalBody>
             </ModalContent>
           </Modal>
