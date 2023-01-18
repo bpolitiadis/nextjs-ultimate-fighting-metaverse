@@ -1,4 +1,4 @@
-import { Heading, Text, Button, Image, Grid, Flex, SimpleGrid, Spacer, Box } from '@chakra-ui/react'
+import { Heading, Text, Button, Image, Grid, Flex, SimpleGrid, Spacer, Box, Container, Center } from '@chakra-ui/react'
 import { Head } from 'components/layout/Head'
 import React, { useEffect, useRef, useState } from 'react'
 import { Address, useAccount, useContractRead, usePrepareContractWrite } from 'wagmi'
@@ -102,15 +102,15 @@ export default function Fight() {
               Congratulations! You own {myFighterIds.length} Ultimate Fighters: {myFighterIds.toString()}
             </Text> */}
           <Text>Here are the fighters you own. Select one to fight!</Text>
-          <SimpleGrid minChildWidth="120px" spacing="16px" gridTemplateColumns={`repeat(${numColumns}, 1fr)`}>
-            {myFighterIds.length === 0 ? (
-              <Text>You don&apos;t own any fighters yet. Go to the Marketplace to buy one!</Text>
-            ) : (
-              myFighterIds.map((id) => (
+          {myFighterIds.length === 0 ? (
+            <Text textAlign="center">You don&apos;t own any fighters yet. Go to the Mint page to mint one!</Text>
+          ) : (
+            <SimpleGrid minChildWidth="120px" spacing="16px" gridTemplateColumns={`repeat(${numColumns}, 1fr)`}>
+              {myFighterIds.map((id) => (
                 <FighterCard key={id} fighter={id} isSelected={id === selectedFighterId} onClick={() => setSelectedFighterId(id)} />
-              ))
-            )}
-          </SimpleGrid>
+              ))}
+            </SimpleGrid>
+          )}
           <Spacer />
           <Spacer />
           <Heading as="h3" fontFamily="fantasy">
