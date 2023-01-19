@@ -95,7 +95,8 @@ export default function MintFighter({
 
   return (
     <Container className={css.mintContainer}>
-      <Flex justifyContent="space-between" flexFlow="row" m="4px" flexWrap="wrap" className={css.imagesContainer}>
+      {/* <Flex justifyContent="space-between" flexFlow="row" m="4px" flexWrap="wrap" className={css.imagesContainer}> */}
+      <Grid templateColumns="repeat(2, 1fr)" gap={4}>
         {imagesBinaryData.length > 0 &&
           imagesBinaryData.map((img, index) => (
             <Box
@@ -110,9 +111,9 @@ export default function MintFighter({
               <Image alt="" className={css.imageContainer} src={`data:image/png;base64,${img.b64_json}`} />
             </Box>
           ))}
-      </Flex>
+      </Grid>
       <Button
-        disabled={!write && isLoading && selectedImageIndex === -1}
+        disabled={!write && isLoading && selectedImageIndex === -1 && selectedImage === ''}
         onClick={mint}
         variant="outline"
         width="400px"

@@ -76,37 +76,40 @@ export default function CreateFighter({
           <option value="Boxing">Boxing</option>
           <option value="Capoeira">Capoeira</option>
           <option value="Wrestling">Wrestling</option>
-          <option value="KickBoxing">Kick-Boxing</option>
+          <option value="Kick-Boxing">Kick-Boxing</option>
           <option value="Karate">Karate</option>
           <option value="Judo">Judo</option>
-          <option value="BrazilianJiuJitsu">Brazilian Jiu Jitsu</option>
-          <option value="MuaiThai">Muai Thai</option>
+          <option value="Brazilian Jiu Jitsu">Brazilian Jiu Jitsu</option>
+          <option value="Muay Thai">Muay Thai</option>
+          <option value="Taekwondo">Taekwondo</option>
+          <option value="Kung Fu">Kung Fu</option>
         </Select>
       </FormControl>
       <Spacer m="8px" />
       <FormControl label="Skin">
         <Select placeholder="Select skin" value={formData.skin} onChange={(e) => setFormData({ ...formData, skin: e.target.value })}>
-          <option value="Caucasian">Caucasian</option>
-          <option value="Dark">Dark</option>
-          <option value="Asian">Asian</option>
+          <option value="caucasian">Caucasian</option>
+          <option value="dark">Dark</option>
+          <option value="asian">Asian</option>
         </Select>
       </FormControl>
       <Spacer m="8px" />
       <FormControl label="Hair Style">
         <Select placeholder="Select hair style" value={formData.hairStyle} onChange={(e) => setFormData({ ...formData, hairStyle: e.target.value })}>
-          <option value="Bald">Bald</option>
-          <option value="Short">Short</option>
-          <option value="Long">Long</option>
-          <option value="Rasta">Rasta</option>
+          <option value="short">Short</option>
+          <option value="long">Long</option>
+          <option value="braided">Braided</option>
+          <option value="shaved">Shaved</option>
         </Select>
       </FormControl>
       <Spacer m="8px" />
       <FormControl label="Hair Color">
         <Select placeholder="Select hair color" value={formData.hairColor} onChange={(e) => setFormData({ ...formData, hairColor: e.target.value })}>
-          <option value="Black">Black</option>
-          <option value="Blonde">Blonde</option>
-          <option value="Brown">Brown</option>
-          <option value="Ginger">Ginger</option>
+          <option value="black">Black</option>
+          <option value="blonde">Blonde</option>
+          <option value="brown">Brown</option>
+          <option value="red">Red</option>
+          <option value="silver">Silver</option>
         </Select>
       </FormControl>
       <Spacer m="16px" />
