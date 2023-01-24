@@ -16,6 +16,7 @@ import {
   ModalBody,
   Spacer,
   Spinner,
+  Link,
 } from '@chakra-ui/react'
 import { useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
 import abi from '../../../constants/abi.json'
@@ -24,15 +25,24 @@ import { NFTStorage, File, Blob } from 'nft.storage'
 import { Address, readContract } from '@wagmi/core'
 import { ImagesResponseDataInner } from 'openai'
 import { ethers } from 'ethers'
+import { FighterCardProps, Rarities } from 'components/fight/FighterCard'
 
 export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: ImagesResponseDataInner[] }) {
   const [selectedImage, setSelectedImage] = useState('')
   const [tokenUrl, setTokenUrl] = useState('')
   const [selectedImageIndex, setSelectedImageIndex] = useState(-1)
   const [imgFromIPFS, setImgFromIPFS] = useState('')
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const [confirmModalOpen, setConfirmModalOpen] = useState(false)
   const [transactionModalOpen, setTransactionModalOpen] = useState(false)
+  const [isModalClosed, setIsModalClosed] = useState(false)
+  const [transactionStatus, setTransactionStatus] = useState<'pending' | 'success' | 'error'>('pending')
+  const [myFighterStats, setMyFighterStats] = useState<FighterCardProps>({
+    strength: 0,
+    stamina: 0,
+    technique: 0,
+    rarity: 0,
+    victories: 0,
+  })
 
   const NFT_STORAGE_TOKEN = process.env.NEXT_PUBLIC_NFTSTORAGE
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN as string })
@@ -49,7 +59,7 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
   })
 
   const {
-    data: fighterStats,
+    data: fighterStatsData,
     isError: fighterStatsError,
     isLoading: fighterStatsLoading,
   } = useContractRead({
@@ -81,13 +91,24 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
     onSuccess: () => {
       console.log('Minted!')
       console.log(data)
-      setTransactionModalOpen(false)
+      setTransactionStatus('success')
     },
     onError: (err) => {
       console.error(err)
-      setTransactionModalOpen(false)
+      setTransactionStatus('error')
     },
   })
+
+  useEffect(() => {
+    if (fighterStatsData) {
+      const fighterStatsArray = fighterStatsData
+        .toString()
+        .split(',')
+        .map((num) => parseInt(num))
+      const [strength, stamina, technique, rarity, victories] = fighterStatsArray
+      setMyFighterStats({ strength, stamina, technique, rarity, victories })
+    }
+  }, [fighterStatsData])
 
   const handleMint = async () => {
     try {
@@ -109,12 +130,20 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
     }
   }
 
-  const handleConfirmMint = () => {
-    if (config && write) {
-      write()
+  const handleConfirmMint = async () => {
+    try {
+      if (write) write()
+      setTransactionStatus('pending')
       setConfirmModalOpen(false)
       setTransactionModalOpen(true)
+    } catch (error) {
+      setTransactionStatus('error')
     }
+  }
+
+  const handleCloseModal = () => {
+    setTransactionModalOpen(false)
+    // setIsModalClosed(true)
   }
 
   return (
@@ -148,27 +177,96 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
       </Button>
       <Modal isOpen={confirmModalOpen} onClose={() => setConfirmModalOpen(false)}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Confirm Mint</ModalHeader>
+        <ModalContent px={12} py={6}>
+          <ModalHeader fontWeight="medium" textAlign="center" mb={4}>
+            Confirm Mint
+          </ModalHeader>
           <ModalCloseButton />
-          <Image borderRadius="md" m="8px" src={`data:image/png;base64,${selectedImage}`} alt={''} />
-          <ModalBody>Are you sure you want to mint this NFT Fighter?</ModalBody>
-          <Flex justifyContent="space-around">
-            <Button onClick={handleConfirmMint}>Mint</Button>
-            <Spacer width={4} />
-            <Button onClick={() => setConfirmModalOpen(false)}>Cancel</Button>
+          <Flex justifyContent="center" alignItems="center" mb={6}>
+            <Image borderRadius="md" width={250} height={250} objectFit="cover" src={`data:image/png;base64,${selectedImage}`} alt={''} />
+          </Flex>
+          <ModalBody textAlign="center">Are you sure you want to mint this NFT Fighter?</ModalBody>
+          <Flex justifyContent="center" alignItems="center" mt={6}>
+            <Button size="lg" variant="outline" onClick={handleConfirmMint} mr={4} colorScheme="green">
+              Mint
+            </Button>
+            <Button size="lg" colorScheme="red" variant="outline" onClick={() => setConfirmModalOpen(false)}>
+              Cancel
+            </Button>
           </Flex>
         </ModalContent>
       </Modal>
+
       <Modal isOpen={transactionModalOpen} onClose={() => setTransactionModalOpen(false)}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Transaction in progress</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody flexDir="column" alignContent="center">
-            <Spinner />
-            Minting your NFT Fighter. Please wait...
-          </ModalBody>
+        <ModalContent px={12} py={6}>
+          <ModalCloseButton onClick={handleCloseModal} />
+          {transactionStatus === 'pending' && (
+            <>
+              <ModalHeader fontWeight="medium" textAlign="center" mb={4}>
+                Transaction in progress
+              </ModalHeader>
+              <Flex justifyContent="center" alignItems="center" mb={6}>
+                <Spinner mr={4} size="xl" />
+              </Flex>
+              <ModalBody textAlign="center" mb={6}>
+                <Text>Transaction is pending, please wait...</Text>
+              </ModalBody>
+            </>
+          )}
+          {transactionStatus === 'success' && (
+            <>
+              <ModalHeader fontWeight="medium" textAlign="center" mb={4}>
+                Transaction Success!
+              </ModalHeader>
+              <ModalBody textAlign="center" mb={6}>
+                <Image
+                  borderRadius="md"
+                  width={250}
+                  height={250}
+                  mx="auto"
+                  src={`data:image/png;base64,${selectedImage}`}
+                  alt={''}
+                  objectFit="cover"
+                  mb={4}
+                />
+                <Text mb={2}>
+                  NFT Fighter Minted Successfully! <br />
+                </Text>
+                {myFighterStats && (
+                  <Box>
+                    <Text mb={2}>Token ID: {lastToken?.toString()}</Text>
+                    <Text mb={2}>Rarity: {Rarities[myFighterStats.rarity]}</Text>
+                    <Text mb={2}>Strength: {myFighterStats.strength}</Text>
+                    <Text mb={2}>Stamina: {myFighterStats.stamina}</Text>
+                    <Text mb={2}>Technique: {myFighterStats.technique}</Text>
+                  </Box>
+                )}
+                <Link
+                  href={`https://mumbai.polygonscan.com/tx/${data?.hash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  fontWeight="medium"
+                  color="blue.500"
+                  mb={4}>
+                  View Transaction
+                </Link>
+              </ModalBody>
+            </>
+          )}
+          {transactionStatus === 'error' && (
+            <>
+              <ModalHeader fontWeight="medium" textAlign="center" mb={4}>
+                Transaction Error
+              </ModalHeader>
+              <ModalBody textAlign="center" mb={6}>
+                <Text>
+                  Sorry, there was an error with the transaction. <br />
+                  {error?.message}
+                </Text>
+              </ModalBody>
+            </>
+          )}
         </ModalContent>
       </Modal>
     </Container>
