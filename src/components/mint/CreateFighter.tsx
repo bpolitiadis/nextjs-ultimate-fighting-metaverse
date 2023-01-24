@@ -86,7 +86,7 @@ export default function CreateFighter({
       console.error(error)
       toast({
         title: 'Error',
-        description: 'An error occured while generating the image, please try again later',
+        description: `Uh oh! It looks like OpenAI is running a little behind schedule. Let's give them another chance!`,
         status: 'error',
         duration: 9000,
         isClosable: true,
@@ -162,7 +162,7 @@ export default function CreateFighter({
             <Spinner mr={4} size="xl" />
           </Flex>
           <ModalBody textAlign="center" mb={6}>
-            <Text>Generating images, please wait...</Text>
+            <Text>Hold tight while we summon OpenAI&apos;s DALL-E to craft your masterpiece!</Text>
           </ModalBody>
         </ModalContent>
       </Modal>
