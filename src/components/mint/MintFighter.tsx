@@ -167,11 +167,11 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
       </Grid>
       <Spacer m="8px" />
       <Button
-        disabled={!write && isLoading && selectedImageIndex === -1 && selectedImage === ''}
+        disabled={isLoading || selectedImageIndex === -1 || selectedImage === ''}
         onClick={handleMint}
         variant="outline"
         width="400px"
-        colorScheme="green"
+        colorScheme="teal"
         className={css.Button}>
         {isLoading ? 'Minting...' : 'Mint'}
       </Button>
