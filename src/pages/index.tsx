@@ -43,11 +43,6 @@ export default function Home() {
             Ultimate Fighter today and let the battles begin!
           </Text>
         </Box>
-        <Box mt={6}>
-          <Link href="/mint" className="create-fighter-link">
-            Create your fighter
-          </Link>
-        </Box>
       </Box>
     </>
   )
