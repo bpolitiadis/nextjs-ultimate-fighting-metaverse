@@ -1,5 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Heading, Text, Button, MenuItem, FormControl, Select, Image, Container, Spacer } from '@chakra-ui/react'
+import {
+  Heading,
+  Text,
+  Button,
+  Menu,
+  MenuItem,
+  FormControl,
+  Select,
+  Image,
+  Container,
+  Spacer,
+  useDisclosure,
+  useToast,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  Modal,
+  Flex,
+  Spinner,
+} from '@chakra-ui/react'
 import { Configuration, ImagesResponseDataInner, OpenAIApi } from 'openai'
 import css from '../../styles/mint.module.css'
 
@@ -16,13 +36,23 @@ export default function CreateFighter({
 }: {
   setImagesBinaryData: React.Dispatch<React.SetStateAction<ImagesResponseDataInner[]>>
 }) {
-  const [formData, setFormData] = useState<OpenAIFormData>({} as OpenAIFormData)
-  const textPrompt = `Create a stunning, maximalist digital matte painting of an epic cinematic martial arts avatar, perfect for the comic book art style, in 8K resolution, utilizing the latest trends on ArtStation and Unreal Engine 5. The avatar should be ${formData['gender']}, ${formData['skin']} skinned, with ${formData['hairStyle']} and ${formData['hairColor']} hair, proficient in ${formData['martialArt']}, and with an intricate, meticulously detailed background that has no letters or numbers,  and is smooth, reminiscent of the styles of Mark Brooks and Dan Mumford.`
-  const [text, setText] = useState(textPrompt)
+  const [formData, setFormData] = useState<OpenAIFormData>({
+    gender: '',
+    martialArt: '',
+    skin: '',
+    hairStyle: '',
+    hairColor: '',
+  })
+  const [text, setText] = useState('')
+  const isFormComplete = Object.values(formData).every((val) => val !== '')
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const toast = useToast()
 
   useEffect(() => {
+    const textPrompt = `Create a stunning, maximalist digital matte painting of an epic cinematic martial arts avatar, perfect for the comic book art style, in 8K resolution, utilizing the latest trends on ArtStation and Unreal Engine 5. The avatar should be ${formData['gender']}, ${formData['skin']} skinned, with ${formData['hairStyle']} and ${formData['hairColor']} hair, proficient in ${formData['martialArt']}, and with an intricate, meticulously detailed background that has no letters or numbers,  and is smooth, reminiscent of the styles of Mark Brooks and Dan Mumford.`
     setText(textPrompt)
-  }, [formData, textPrompt])
+  }, [formData])
 
   const oai = useRef(
     new OpenAIApi(
@@ -36,21 +66,35 @@ export default function CreateFighter({
   const create = async () => {
     console.log(text)
     try {
+      onOpen()
       const response = await oai.current.createImage({
         prompt: text,
         n: 4,
         size: '256x256',
         response_format: 'b64_json',
       })
-      // console.log(response.data.data)
       setImagesBinaryData(response.data.data)
+      onClose()
+      // toast({
+      //   title: 'Success',
+      //   description: 'Now choose your fighter!',
+      //   status: 'success',
+      //   duration: 5000,
+      //   isClosable: true,
+      // })
     } catch (error) {
       console.error(error)
+      toast({
+        title: 'Error',
+        description: 'An error occured while generating the image, please try again later',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      })
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(formData.toString())
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
@@ -62,32 +106,24 @@ export default function CreateFighter({
       <Text>Select you fighter&apos;s charachteristics:</Text>
       <Spacer m="16px" />
       <FormControl>
-        <Select placeholder="Select gender" value={formData.gender} onChange={(e) => setFormData({ ...formData, gender: e.target.value })}>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
+        <Select placeholder="Select gender" value={formData.gender} onChange={handleChange} name="gender">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
         </Select>
       </FormControl>
       <Spacer m="8px" />
       <FormControl label="Martial Art">
-        <Select
-          placeholder="Select martial art"
-          value={formData.martialArt}
-          onChange={(e) => setFormData({ ...formData, martialArt: e.target.value })}>
-          <option value="Boxing">Boxing</option>
+        <Select placeholder="Select martial art" value={formData.martialArt} onChange={handleChange} name="martialArt">
+          <option value="Karate">Karate</option>
+          <option value="Muay Thai">Muay Thai</option>
           <option value="Capoeira">Capoeira</option>
           <option value="Wrestling">Wrestling</option>
-          <option value="Kick-Boxing">Kick-Boxing</option>
-          <option value="Karate">Karate</option>
-          <option value="Judo">Judo</option>
-          <option value="Brazilian Jiu Jitsu">Brazilian Jiu Jitsu</option>
-          <option value="Muay Thai">Muay Thai</option>
-          <option value="Taekwondo">Taekwondo</option>
           <option value="Kung Fu">Kung Fu</option>
         </Select>
       </FormControl>
       <Spacer m="8px" />
       <FormControl label="Skin">
-        <Select placeholder="Select skin" value={formData.skin} onChange={(e) => setFormData({ ...formData, skin: e.target.value })}>
+        <Select placeholder="Select skin" value={formData.skin} onChange={handleChange} name="skin">
           <option value="caucasian">Caucasian</option>
           <option value="dark">Dark</option>
           <option value="asian">Asian</option>
@@ -95,7 +131,7 @@ export default function CreateFighter({
       </FormControl>
       <Spacer m="8px" />
       <FormControl label="Hair Style">
-        <Select placeholder="Select hair style" value={formData.hairStyle} onChange={(e) => setFormData({ ...formData, hairStyle: e.target.value })}>
+        <Select placeholder="Select hair style" value={formData.hairStyle} onChange={handleChange} name="hairStyle">
           <option value="short">Short</option>
           <option value="long">Long</option>
           <option value="braided">Braided</option>
@@ -104,7 +140,7 @@ export default function CreateFighter({
       </FormControl>
       <Spacer m="8px" />
       <FormControl label="Hair Color">
-        <Select placeholder="Select hair color" value={formData.hairColor} onChange={(e) => setFormData({ ...formData, hairColor: e.target.value })}>
+        <Select placeholder="Select hair color" value={formData.hairColor} onChange={handleChange} name="hairColor">
           <option value="black">Black</option>
           <option value="blonde">Blonde</option>
           <option value="brown">Brown</option>
@@ -113,9 +149,23 @@ export default function CreateFighter({
         </Select>
       </FormControl>
       <Spacer m="16px" />
-      <Button onClick={create} variant="outline" width="400px" colorScheme="green">
+      <Button isDisabled={!isFormComplete} onClick={create} variant="outline" width="400px" colorScheme="teal">
         Generate
       </Button>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader textAlign="center" fontWeight="medium">
+            Please wait
+          </ModalHeader>
+          <Flex justifyContent="center" alignItems="center" mb={6}>
+            <Spinner mr={4} size="xl" />
+          </Flex>
+          <ModalBody textAlign="center" mb={6}>
+            <Text>Generating images, please wait...</Text>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Container>
   )
 }
