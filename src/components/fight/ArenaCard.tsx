@@ -125,7 +125,7 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
 
   return (
     <Card>
-      <CardBody textAlign="center" rounded="lg" borderWidth={'1px'} borderColor={'gray.200'}>
+      <CardBody textAlign="center" rounded="lg" borderWidth={'1px'} borderColor={'gray.500'}>
         <Text align="center" fontSize="2xl" fontFamily="fantasy" fontStyle="oblique">
           Arena #{arenaId}
         </Text>
