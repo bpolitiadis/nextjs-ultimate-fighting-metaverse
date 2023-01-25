@@ -26,6 +26,7 @@ import {
   ThemeProvider,
 } from '@chakra-ui/react'
 import { ThemeContext } from '@emotion/react'
+import { ipfsGatewayReplace } from 'utils/helpers/helpers'
 
 export interface FighterCardProps {
   strength: number
@@ -40,6 +41,13 @@ export const Rarities: any = {
   1: 'Uncommon',
   2: 'Rare',
   3: 'Legendary',
+}
+
+export const RarityColors: any = {
+  0: 'gray.400',
+  1: 'green.400',
+  2: 'blue.400',
+  3: 'yellow.400',
 }
 
 export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; isSelected: boolean; onClick: any }) => {
@@ -103,7 +111,7 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
             setMyFighterImage(jsonResponse.image)
             setMyFighterImageBase64(jsonResponse.imageBase64)
             setMyFighterBlobURI(jsonResponse.blobURI)
-            setMyFighterTokenId(jsonResponse.properties.tokenID)
+            setMyFighterTokenId(jsonResponse.tokenID)
           } else {
             console.log('Error fetching metadata: ' + response.statusText)
           }
@@ -115,11 +123,6 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
     }
   }, [tokenUrl])
 
-  const ipfsGatewayReplace = (url: string) => {
-    console.log('url: ' + url)
-    return url.replace(/^ipfs:\/\//, 'https://ipfs.io/ipfs/')
-  }
-
   return (
     <Flex width={['85%', '80%', '75%']} mx="auto" my={4}>
       <Card
@@ -128,6 +131,7 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
         rounded="lg"
         borderWidth={isSelected ? '2px' : '1px'}
         borderColor={isSelected ? 'blue.200' : 'gray.200'}
+        // bgColor={myFighterStats.rarity ? rarityColors[myFighterStats.rarity] : 'gray.400'}
         onClick={() => onClick(fighter)}>
         <CardHeader>
           <Text align="center" fontSize="2xl" fontFamily="fantasy" fontStyle="oblique">
@@ -136,7 +140,14 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
         </CardHeader>
         <CardBody textAlign="center">
           <Stack>
-            <Image borderRadius="md" src={`data:image/png;base64,${myFighterImageBase64}`} alt={myFighterTokenId} objectFit="cover" />
+            <Image
+              border="4px"
+              borderColor={myFighterStats.rarity ? RarityColors[myFighterStats.rarity] : 'gray.400'}
+              borderRadius="md"
+              src={`data:image/png;base64,${myFighterImageBase64}`}
+              alt={myFighterTokenId}
+              objectFit="cover"
+            />
             <StackDivider />
             <Box>
               <Text>Rarity: {Rarities[myFighterStats.rarity]}</Text>
@@ -147,7 +158,7 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
             </Box>
           </Stack>
         </CardBody>
-        <CardFooter>
+        <CardFooter justifyContent="center">
           <Button colorScheme="blue" variant="outline" size="sm" onClick={onOpen}>
             Details
           </Button>
@@ -161,6 +172,8 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
               <ModalBody>
                 <Container>
                   <Image
+                    border="4px"
+                    borderColor={myFighterStats.rarity ? RarityColors[myFighterStats.rarity] : 'gray.400'}
                     display="block"
                     margin="auto"
                     borderRadius="md"

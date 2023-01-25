@@ -2,7 +2,23 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Address, useAccount, useContractRead, usePrepareContractWrite, useWaitForTransaction, useContractWrite } from 'wagmi'
 import abi from '../../../constants/abi.json'
 
-import { Card, CardHeader, CardBody, CardFooter, Heading, Stack, Box, StackDivider, Text, Image, Flex, Button, Spacer } from '@chakra-ui/react'
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Heading,
+  Stack,
+  Box,
+  StackDivider,
+  Text,
+  Image,
+  Flex,
+  Button,
+  Spacer,
+  Toast,
+  useToast,
+} from '@chakra-ui/react'
 import Fight from 'pages/fight'
 import { ethers } from 'ethers'
 
@@ -18,6 +34,10 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
 
   const [tokenId, setTokenId] = useState<number>(0)
   const [myArena, setMyArena] = useState<ArenaCardProps>(arena)
+  const [modalOpen, setModalOpen] = useState<boolean>(false)
+  const [modalTitle, setModalTitle] = useState<string>('')
+  const [modalMessage, setModalMessage] = useState<string>('')
+  const toast = useToast()
 
   const {
     data: arenaData,
@@ -50,11 +70,24 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
   const { isLoading, isSuccess } = useWaitForTransaction({
     hash: data?.hash,
     onSuccess: () => {
-      console.log(data)
-      // setMyArena(arenaData as ArenaCardProps)
+      console.log(JSON.stringify(data))
+      toast({
+        title: 'Success',
+        description: 'You have joined the arena',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      })
     },
     onError: (err) => {
       console.error(err)
+      toast({
+        title: 'Error',
+        description: 'Something went wrong',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      })
     },
   })
 
@@ -65,8 +98,28 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
   }, [arenaData])
 
   async function joinArena() {
-    if (config) {
-      write?.()
+    if (selectedFighter === 0) {
+      toast({
+        title: 'Error',
+        description: 'Please select a fighter',
+        status: 'error',
+        duration: 6000,
+        isClosable: true,
+      })
+    } else if (selectedFighter === arena.tokenId1 || selectedFighter === arena.tokenId2) {
+      if (arena.winnerId === selectedFighter) {
+        setModalTitle('Congratulations!')
+        setModalMessage('You won the arena match')
+        setModalOpen(true)
+      } else {
+        setModalTitle('Sorry')
+        setModalMessage('You lost the arena match')
+        setModalOpen(true)
+      }
+    } else {
+      if (config && write) {
+        write()
+      }
     }
   }
 
@@ -84,10 +137,8 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
             alt={'ArenaImg'}
             borderRadius="full"
             boxSize="100px"
-            minW="100px"
-            maxW="100px"
-            minH="100px"
-            maxH="100px"
+            width="100px"
+            height="100px"
             objectFit="contain"></Image>
         </Box>
         <Spacer m="8px" />
@@ -98,19 +149,20 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
         <Spacer m="4px" />
         <Button
           colorScheme="blue"
+          // onClick={() => {
+          //   console.log('Join Arena')
+          //   if (selectedFighter === 0) {
+          //     console.log('Please select a fighter')
+          //   } else if (selectedFighter === arena.tokenId1 || selectedFighter === arena.tokenId2) {
+          //     console.log('You are already in this arena')
+          //   } else {
+          //     console.log('Joining arena')
+          //     joinArena()
+          //   }
+          // }}
+          onClick={joinArena}
           variant="outline"
-          size="sm"
-          onClick={() => {
-            console.log('Join Arena')
-            if (selectedFighter === 0) {
-              console.log('Please select a fighter')
-            } else if (selectedFighter === arena.tokenId1 || selectedFighter === arena.tokenId2) {
-              console.log('You are already in this arena')
-            } else {
-              console.log('Joining arena')
-              joinArena()
-            }
-          }}>
+          size="sm">
           Join Arena
         </Button>
       </CardBody>
