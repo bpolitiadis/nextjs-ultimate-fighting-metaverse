@@ -26,6 +26,7 @@ export function Header(props: Props) {
         <LinkComponent href="/">Home</LinkComponent>
         <LinkComponent href="/mint">Mint</LinkComponent>
         <LinkComponent href="/fight">Fight</LinkComponent>
+        <LinkComponent href="/rankings">Rankings</LinkComponent>
         <LinkComponent href="/about">About</LinkComponent>
         <ConnectKitButton />
         <ThemeSwitcher />
