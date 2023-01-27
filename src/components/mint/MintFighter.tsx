@@ -21,7 +21,7 @@ import {
   Badge,
   Divider,
 } from '@chakra-ui/react'
-import { useNetwork, useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
+import { useNetwork, useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction, useContractEvent } from 'wagmi'
 import abi from '../../../constants/abi.json'
 import css from '../../styles/mint.module.css'
 import { NFTStorage, File, Blob } from 'nft.storage'
@@ -42,6 +42,7 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
   const [ipfsModalOpen, setIpfsModalOpen] = useState(false)
   const [isModalClosed, setIsModalClosed] = useState(false)
   const [transactionStatus, setTransactionStatus] = useState<'pending' | 'success' | 'error'>('pending')
+  const [myTokenID, setMyTokenID] = useState(0)
   const [myFighterStats, setMyFighterStats] = useState<FighterCardProps>({
     strength: 0,
     stamina: 0,
@@ -52,6 +53,24 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
 
   const NFT_STORAGE_TOKEN = process.env.NEXT_PUBLIC_NFTSTORAGE
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN as string })
+
+  useContractEvent({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address,
+    abi: abi,
+    eventName: 'FighterCreated',
+    listener(tokenID: any, fighterData: any) {
+      console.log('FighterCreated ', tokenID.toNumber(), '\nFighter Stats:', JSON.stringify(fighterData as FighterCardProps))
+      setMyTokenID(tokenID.toNumber())
+      setMyFighterStats({
+        strength: fighterData.strength.toNumber(),
+        stamina: fighterData.stamina.toNumber(),
+        technique: fighterData.technique.toNumber(),
+        rarity: fighterData.rarity,
+        victories: fighterData.victories.toNumber(),
+      })
+      console.log('Fighter Stats:', JSON.stringify(myFighterStats as FighterCardProps))
+    },
+  })
 
   const {
     data: mintPriceData,
