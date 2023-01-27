@@ -9,7 +9,7 @@ export default function About() {
         <Heading as="h2" textAlign="center" mb={8}>
           About Ultimate Fighting Metaverse
         </Heading>
-        <Box mx="auto" maxW="800px" p={6}>
+        <Box mx="auto" maxW="100%" p={6}>
           <Flex align="center" mb={8}>
             <Image src={'./images/ancient-greek-2.jpg'} alt="" rounded="lg" mr={4} width="25%" height="25%" />
             <Text fontSize="xl" mb={4}>
