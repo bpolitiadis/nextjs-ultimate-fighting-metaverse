@@ -19,6 +19,7 @@ import {
   Modal,
   Flex,
   Spinner,
+  Box,
 } from '@chakra-ui/react'
 import { Configuration, ImagesResponseDataInner, OpenAIApi } from 'openai'
 import css from '../../styles/mint.module.css'
@@ -102,7 +103,7 @@ export default function CreateFighter({
   }
 
   return (
-    <Container className={css.selectionMenu}>
+    <Box className={css.selectionMenu}>
       <Text>Select you fighter&apos;s charachteristics:</Text>
       <Spacer m="16px" />
       <FormControl>
@@ -166,6 +167,6 @@ export default function CreateFighter({
           </ModalBody>
         </ModalContent>
       </Modal>
-    </Container>
+    </Box>
   )
 }

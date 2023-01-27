@@ -17,23 +17,29 @@ import {
   Spacer,
   Spinner,
   Link,
+  Stack,
+  Badge,
+  Divider,
 } from '@chakra-ui/react'
-import { useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
+import { useNetwork, useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi'
 import abi from '../../../constants/abi.json'
 import css from '../../styles/mint.module.css'
 import { NFTStorage, File, Blob } from 'nft.storage'
 import { Address, readContract } from '@wagmi/core'
 import { ImagesResponseDataInner } from 'openai'
 import { ethers } from 'ethers'
-import { FighterCardProps, Rarities } from 'components/fight/FighterCard'
+import { FighterCardProps, Rarities, RarityColors } from 'components/fight/FighterCard'
 
 export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: ImagesResponseDataInner[] }) {
+  const network = useNetwork()
+  const [mintPrice, setMintPrice] = useState(Number(0))
   const [selectedImage, setSelectedImage] = useState('')
   const [tokenUrl, setTokenUrl] = useState('')
   const [selectedImageIndex, setSelectedImageIndex] = useState(-1)
   const [imgFromIPFS, setImgFromIPFS] = useState('')
   const [confirmModalOpen, setConfirmModalOpen] = useState(false)
   const [transactionModalOpen, setTransactionModalOpen] = useState(false)
+  const [ipfsModalOpen, setIpfsModalOpen] = useState(false)
   const [isModalClosed, setIsModalClosed] = useState(false)
   const [transactionStatus, setTransactionStatus] = useState<'pending' | 'success' | 'error'>('pending')
   const [myFighterStats, setMyFighterStats] = useState<FighterCardProps>({
@@ -46,6 +52,17 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
 
   const NFT_STORAGE_TOKEN = process.env.NEXT_PUBLIC_NFTSTORAGE
   const client = new NFTStorage({ token: NFT_STORAGE_TOKEN as string })
+
+  const {
+    data: mintPriceData,
+    isError: mintPriceError,
+    isLoading: mintPriceLoading,
+  } = useContractRead({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address,
+    abi: abi,
+    functionName: 'getMintPrice',
+    args: [],
+  })
 
   const {
     data: lastToken,
@@ -108,12 +125,19 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
       const [strength, stamina, technique, rarity, victories] = fighterStatsArray
       setMyFighterStats({ strength, stamina, technique, rarity, victories })
     }
-  }, [fighterStatsData])
+  }, [fighterStatsData, isSuccess])
+
+  useEffect(() => {
+    if (mintPriceData) {
+      setMintPrice(Number(mintPriceData.toString()) / 10 ** 18)
+    }
+  }, [mintPriceData])
 
   const handleMint = async () => {
     try {
       const imageFile = new File([selectedImage], `UFM-${String(Number(lastToken) + 1)}.png`, { type: 'image/png' })
 
+      setIpfsModalOpen(true)
       const metadata = await client.store({
         name: 'UFM',
         tokenID: String(Number(lastToken) + 1),
@@ -121,6 +145,7 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
         image: imageFile,
         imageBase64: selectedImage,
       })
+      setIpfsModalOpen(false)
 
       console.log('Response from IPFS: ' + metadata.url)
       setTokenUrl(metadata.url)
@@ -143,11 +168,10 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
 
   const handleCloseModal = () => {
     setTransactionModalOpen(false)
-    // setIsModalClosed(true)
   }
 
   return (
-    <Container className={css.mintContainer}>
+    <Box className={css.mintContainer}>
       <Grid templateColumns="repeat(2, 1fr)" gap={2}>
         {imagesBinaryData.length > 0 &&
           imagesBinaryData.map((img, index) => (
@@ -182,18 +206,23 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
             Confirm Mint
           </ModalHeader>
           <ModalCloseButton />
-          <Flex justifyContent="center" alignItems="center" mb={6}>
-            <Image borderRadius="md" width={250} height={250} objectFit="cover" src={`data:image/png;base64,${selectedImage}`} alt={''} />
-          </Flex>
-          <ModalBody textAlign="center">Are you sure you want to mint this NFT Fighter?</ModalBody>
-          <Flex justifyContent="center" alignItems="center" mt={6}>
-            <Button size="lg" variant="outline" onClick={handleConfirmMint} mr={4} colorScheme="green">
-              Mint
-            </Button>
-            <Button size="lg" colorScheme="red" variant="outline" onClick={() => setConfirmModalOpen(false)}>
-              Cancel
-            </Button>
-          </Flex>
+          <ModalBody textAlign="center">
+            <Flex justifyContent="center" alignItems="center" mb={6}>
+              <Image borderRadius="md" width={250} height={250} objectFit="cover" src={`data:image/png;base64,${selectedImage}`} alt={''} />
+            </Flex>
+            <Text>Are you sure you want to mint this NFT?</Text>
+            <Text fontSize="sm" fontStyle="oblique">
+              Mint Price : {mintPrice} {network.chain?.network === 'mainnet' ? 'ETH' : 'MATIC'}
+            </Text>
+            <Flex justifyContent="center" alignItems="center" mt={6}>
+              <Button size="lg" variant="outline" onClick={handleConfirmMint} mr={4} colorScheme="green">
+                Mint
+              </Button>
+              <Button size="lg" colorScheme="red" variant="outline" onClick={() => setConfirmModalOpen(false)}>
+                Cancel
+              </Button>
+            </Flex>
+          </ModalBody>
         </ModalContent>
       </Modal>
 
@@ -219,38 +248,36 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
               <ModalHeader fontWeight="medium" textAlign="center" mb={4}>
                 Transaction Success!
               </ModalHeader>
-              <ModalBody textAlign="center" mb={6}>
-                <Image
-                  borderRadius="md"
-                  width={250}
-                  height={250}
-                  mx="auto"
-                  src={`data:image/png;base64,${selectedImage}`}
-                  alt={''}
-                  objectFit="cover"
-                  mb={4}
-                />
-                <Text mb={2}>
-                  NFT Fighter Minted Successfully! <br />
-                </Text>
-                {myFighterStats && (
-                  <Box>
-                    <Text mb={2}>Token ID: {lastToken?.toString()}</Text>
-                    <Text mb={2}>Rarity: {Rarities[myFighterStats.rarity]}</Text>
-                    <Text mb={2}>Strength: {myFighterStats.strength}</Text>
-                    <Text mb={2}>Stamina: {myFighterStats.stamina}</Text>
-                    <Text mb={2}>Technique: {myFighterStats.technique}</Text>
-                  </Box>
-                )}
-                <Link
-                  href={`https://mumbai.polygonscan.com/tx/${data?.hash}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  fontWeight="medium"
-                  color="blue.500"
-                  mb={4}>
-                  View Transaction
-                </Link>
+              <ModalBody>
+                <Box textAlign="center">
+                  <Stack>
+                    <Image
+                      border="4px"
+                      borderColor={myFighterStats.rarity ? RarityColors[myFighterStats.rarity] : 'gray.400'}
+                      borderRadius="md"
+                      src={`data:image/png;base64,${selectedImage}`}
+                      alt={''}
+                      objectFit="cover"
+                    />
+                    <Badge colorScheme={RarityColors[myFighterStats.rarity]}>{Rarities[myFighterStats.rarity]}</Badge>
+                    <Divider />
+                    <Box>
+                      <Text>Strength: {myFighterStats.strength}</Text>
+                      <Text>Stamina: {myFighterStats.stamina}</Text>
+                      <Text>Technique: {myFighterStats.technique}</Text>
+                    </Box>
+                    <Divider m="8px" />
+                  </Stack>
+                  <Link
+                    href={`https://mumbai.polygonscan.com/tx/${data?.hash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    fontWeight="medium"
+                    color="blue.500"
+                    mb={4}>
+                    View Transaction
+                  </Link>
+                </Box>
               </ModalBody>
             </>
           )}
@@ -269,6 +296,21 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
           )}
         </ModalContent>
       </Modal>
-    </Container>
+
+      <Modal isOpen={ipfsModalOpen} onClose={() => setIpfsModalOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader textAlign="center" fontWeight="medium">
+            Please wait
+          </ModalHeader>
+          <Flex justifyContent="center" alignItems="center" mb={6}>
+            <Spinner mr={4} size="xl" />
+          </Flex>
+          <ModalBody textAlign="center" mb={6}>
+            <Text>Sending your fighter&apos;s image to IPFS. It&apos;s not as fast as your fighter&apos;s punches, but it&apos;s on its way.</Text>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </Box>
   )
 }

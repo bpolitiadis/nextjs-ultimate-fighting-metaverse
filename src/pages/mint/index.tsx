@@ -25,14 +25,13 @@ export default function Mint() {
         </Heading>
         {isConnected && (
           <>
-            <Container className={css.root}>
-              <Container className={css.container}>
+            <Box className={css.root}>
+              <Box className={css.container}>
                 <CreateFighter setImagesBinaryData={setImagesBinaryData} />
                 <Spacer m="16px" />
                 <MintFighter imagesBinaryData={imagesBinaryData} />
-                <br />
-              </Container>
-            </Container>
+              </Box>
+            </Box>
           </>
         )}
         {!isConnected && (
