@@ -24,6 +24,8 @@ import {
   Button,
   Container,
   ThemeProvider,
+  Badge,
+  Divider,
 } from '@chakra-ui/react'
 import { ThemeContext } from '@emotion/react'
 import { ipfsGatewayReplace } from 'utils/helpers/helpers'
@@ -44,10 +46,10 @@ export const Rarities: any = {
 }
 
 export const RarityColors: any = {
-  0: 'gray.400',
-  1: 'green.400',
-  2: 'blue.400',
-  3: 'yellow.400',
+  0: 'gray',
+  1: 'green',
+  2: 'blue',
+  3: 'yellow',
 }
 
 export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; isSelected: boolean; onClick: any }) => {
@@ -124,7 +126,7 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
   }, [tokenUrl])
 
   return (
-    <Flex width={['85%', '80%', '75%']} mx="auto" my={4}>
+    <Box width={['85%', '80%', '75%']} mx="auto" my={4}>
       <Card
         minWidth="250px"
         maxWidth="250px"
@@ -147,52 +149,56 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
               src={`data:image/png;base64,${myFighterImageBase64}`}
               alt={myFighterTokenId}
               objectFit="cover"
+              onClick={onOpen}
             />
-            <StackDivider />
+            <Badge colorScheme={RarityColors[myFighterStats.rarity]}>{Rarities[myFighterStats.rarity]}</Badge>
+            <Divider />
             <Box>
+              {/* <Text>Rarity: {Rarities[myFighterStats.rarity]}</Text> */}
+              <Text>Strength: {myFighterStats.strength}</Text>
+              <Text>Stamina: {myFighterStats.stamina}</Text>
+              <Text>Technique: {myFighterStats.technique}</Text>
+            </Box>
+            <Divider m="8px" />
+          </Stack>
+
+          <Text marginTop="8px">Victories: {myFighterStats.victories}</Text>
+        </CardBody>
+        {/* <CardFooter justifyContent="center">
+          <Button colorScheme="blue" variant="outline" size="sm" onClick={onOpen}>
+            Details
+          </Button>
+        </CardFooter> */}
+      </Card>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent textAlign="center">
+          <ModalHeader fontFamily="fantasy" fontStyle="oblique">
+            Fighter #{fighter}
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Container>
+              <Image
+                border="4px"
+                borderColor={myFighterStats.rarity ? RarityColors[myFighterStats.rarity] : 'gray.400'}
+                display="block"
+                margin="auto"
+                borderRadius="md"
+                src={`data:image/png;base64,${myFighterImageBase64}`}
+                alt={`Fighter #${fighter}`}
+                rounded="md"
+              />
+              <Text>Token ID: {fighter}</Text>
               <Text>Rarity: {Rarities[myFighterStats.rarity]}</Text>
               <Text>
                 Strength: {myFighterStats.strength} | Stamina: {myFighterStats.stamina} | Technique: {myFighterStats.technique}{' '}
               </Text>
               <Text>Victories: {myFighterStats.victories}</Text>
-            </Box>
-          </Stack>
-        </CardBody>
-        <CardFooter justifyContent="center">
-          <Button colorScheme="blue" variant="outline" size="sm" onClick={onOpen}>
-            Details
-          </Button>
-          <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent textAlign="center">
-              <ModalHeader fontFamily="fantasy" fontStyle="oblique">
-                Fighter #{fighter}
-              </ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                <Container>
-                  <Image
-                    border="4px"
-                    borderColor={myFighterStats.rarity ? RarityColors[myFighterStats.rarity] : 'gray.400'}
-                    display="block"
-                    margin="auto"
-                    borderRadius="md"
-                    src={`data:image/png;base64,${myFighterImageBase64}`}
-                    alt={`Fighter #${fighter}`}
-                    rounded="md"
-                  />
-                  <Text>Token ID: {fighter}</Text>
-                  <Text>Rarity: {Rarities[myFighterStats.rarity]}</Text>
-                  <Text>
-                    Strength: {myFighterStats.strength} | Stamina: {myFighterStats.stamina} | Technique: {myFighterStats.technique}{' '}
-                  </Text>
-                  <Text>Victories: {myFighterStats.victories}</Text>
-                </Container>
-              </ModalBody>
-            </ModalContent>
-          </Modal>
-        </CardFooter>
-      </Card>
-    </Flex>
+            </Container>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </Box>
   )
 }
