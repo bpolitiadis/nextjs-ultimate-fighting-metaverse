@@ -122,7 +122,7 @@ export default function Fight() {
           {isConnected && (
             <>
               <Text>Here are the arenas you can fight in.</Text>
-              <SimpleGrid columns={4} spacing={5}>
+              <SimpleGrid columns={4} spacing={0}>
                 {arenas.map((arena, index) => (
                   <Box p={4} key={index}>
                     <ArenaCard key={index} arenaId={index + 1} arena={arenas[index]} selectedFighter={selectedFighterId} />
