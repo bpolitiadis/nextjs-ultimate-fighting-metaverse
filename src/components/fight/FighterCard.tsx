@@ -178,24 +178,29 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Container>
-              <Image
-                border="4px"
-                borderColor={myFighterStats.rarity ? RarityColors[myFighterStats.rarity] : 'gray.400'}
-                display="block"
-                margin="auto"
-                borderRadius="md"
-                src={`data:image/png;base64,${myFighterImageBase64}`}
-                alt={`Fighter #${fighter}`}
-                rounded="md"
-              />
-              <Text>Token ID: {fighter}</Text>
-              <Text>Rarity: {Rarities[myFighterStats.rarity]}</Text>
-              <Text>
-                Strength: {myFighterStats.strength} | Stamina: {myFighterStats.stamina} | Technique: {myFighterStats.technique}{' '}
-              </Text>
-              <Text>Victories: {myFighterStats.victories}</Text>
-            </Container>
+            <Box>
+              <Stack>
+                <Image
+                  border="4px"
+                  borderColor={myFighterStats.rarity ? RarityColors[myFighterStats.rarity] : 'gray.400'}
+                  borderRadius="md"
+                  src={`data:image/png;base64,${myFighterImageBase64}`}
+                  alt={myFighterTokenId}
+                  objectFit="cover"
+                  onClick={onOpen}
+                />
+                <Badge colorScheme={RarityColors[myFighterStats.rarity]}>{Rarities[myFighterStats.rarity]}</Badge>
+                <Divider />
+                <Box>
+                  {/* <Text>Rarity: {Rarities[myFighterStats.rarity]}</Text> */}
+                  <Text>Strength: {myFighterStats.strength}</Text>
+                  <Text>Stamina: {myFighterStats.stamina}</Text>
+                  <Text>Technique: {myFighterStats.technique}</Text>
+                </Box>
+                <Divider m="8px" />
+              </Stack>
+              <Text marginTop="8px">Victories: {myFighterStats.victories}</Text>
+            </Box>
           </ModalBody>
         </ModalContent>
       </Modal>
