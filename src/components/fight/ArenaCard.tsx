@@ -50,7 +50,7 @@ export interface ArenaCardProps {
 export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number; arena: ArenaCardProps; selectedFighter: number }) => {
   const { address: user, isConnecting, isDisconnected, isConnected } = useAccount()
 
-  const [tokenId, setTokenId] = useState<number>(0)
+  const [tokenId1, setTokenId1] = useState<number>(0)
   const [myArena, setMyArena] = useState<ArenaCardProps>(arena)
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [modalTitle, setModalTitle] = useState<string>('')
@@ -68,6 +68,30 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
       console.log('Token Id 1 : ' + tokenId1)
       console.log('Token Id 2 : ' + tokenId2)
       console.log('Outcome : ' + outcome)
+      setMyArena({
+        matchId: matchId.toNumber(),
+        tokenId1: tokenId1.toNumber(),
+        tokenId2: tokenId2.toNumber(),
+        winnerId: outcome.toNumber(),
+      })
+    },
+  })
+
+  useContractEvent({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address,
+    abi: abi,
+    eventName: 'ArenaOpened',
+    listener(arenaId: any, tokenId: any) {
+      console.log('ArenaOpened!')
+      console.log('Arena Id : ' + arenaId)
+      console.log('Token Id : ' + tokenId)
+      setTokenId1(tokenId)
+      setMyArena({
+        matchId: 0,
+        tokenId1: tokenId.toNumber(),
+        tokenId2: 0,
+        winnerId: 0,
+      })
     },
   })
 
@@ -103,6 +127,7 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
     hash: data?.hash,
     onSuccess: () => {
       console.log(JSON.stringify(data))
+      // setMyArena(arenaData as ArenaCardProps)
       toast({
         title: 'Success',
         description: 'You have joined the arena',
@@ -187,23 +212,53 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Joining arena...</ModalHeader>
+          {isLoading && (
+            <>
+              <ModalHeader textAlign="center">Joining the arena...</ModalHeader>
+            </>
+          )}
+          {isSuccess && (
+            <>
+              <ModalHeader textAlign="center">Joined the arena!</ModalHeader>
+            </>
+          )}
           <ModalCloseButton />
           <ModalBody>
-            <Flex flexDir="column" justifyContent="center" alignItems="center">
-              {isLoading && (
-                <>
+            {isLoading && (
+              <>
+                <Flex flexDir="column" justifyContent="center" alignItems="center">
                   <Spinner />
-                  <Text>Joining arena...</Text>
-                </>
-              )}
-              {isSuccess && (
-                <>
-                  <Text>Success!</Text>
-                  <Text>Transaction hash: {data?.hash}</Text>
-                </>
-              )}
-            </Flex>
+                  <Text verticalAlign="center" m="16px" fontStyle="oblique">
+                    Joining arena...
+                  </Text>
+                </Flex>
+              </>
+            )}
+            {isSuccess && (
+              <>
+                {myArena.tokenId2 == 0 && (
+                  <>
+                    <Text verticalAlign="center" m="16px" fontStyle="oblique">
+                      Waiting for another fighter to join...
+                    </Text>
+                  </>
+                )}
+                {myArena.tokenId2 != 0 && (
+                  <>
+                    {myArena.winnerId == selectedFighter && (
+                      <>
+                        <Text>You won!</Text>
+                      </>
+                    )}
+                    {myArena.winnerId != selectedFighter && (
+                      <>
+                        <Text>You lost!</Text>
+                      </>
+                    )}
+                  </>
+                )}
+              </>
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>
