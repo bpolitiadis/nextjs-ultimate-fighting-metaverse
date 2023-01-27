@@ -5,7 +5,7 @@ export default function About() {
   return (
     <>
       <Head />
-      <main>
+      <Box>
         <Heading as="h2" textAlign="center" mb={8}>
           About Ultimate Fighting Metaverse
         </Heading>
@@ -51,7 +51,7 @@ export default function About() {
             fighting mythological monsters or something. But no, you had to go and make a dApp. Priorities, am I right?
           </Text>
         </Box>
-      </main>
+      </Box>
     </>
   )
 }

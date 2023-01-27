@@ -192,7 +192,7 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
           <Divider />
           <CardBody>
             <Box display="flex" alignItems="center" justifyContent="center">
-              <Image src={'./images/arena1.jpg'} alt={'ArenaImg'} borderRadius="full" width="100%" height="100%" objectFit="contain"></Image>
+              <Image src={`./images/arena${arenaId}.jpg`} alt={'ArenaImg'} borderRadius="full" width="100%" height="100%" objectFit="contain"></Image>
             </Box>
             <Spacer m="24px" />
             <Flex justifyContent="space-between" flexDirection="row">
