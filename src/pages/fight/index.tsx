@@ -86,47 +86,58 @@ export default function Fight() {
   return (
     <>
       <Head />
-      <main className={css.root}>
-        {/* <Heading as="h2">Fight Page</Heading>
-        <Text>
-          Welcome to the Ultimate Fighting Metaverse fight page! This is where you'll be able to use your one-of-a-kind NFT to access and battle in
-          our virtual reality game. Select your fighter and get ready to prove your worth in the ring. Are you ready to take on all challengers? Let's
-          do this!
-        </Text> */}
-        <div className={css.container}>
+      <Box className={css.root}>
+        <Box className={css.container}>
           <Heading as="h3" fontFamily="fantasy">
             My Fighters
           </Heading>
-          <Text>Hi {user} !</Text>
-          {/* <Text>
-              Congratulations! You own {myFighterIds.length} Ultimate Fighters: {myFighterIds.toString()}
-            </Text> */}
-          <Text>Here are the fighters you own. Select one to fight!</Text>
-          {myFighterIds.length === 0 ? (
-            <Text textAlign="center">You don&apos;t own any fighters yet. Go to the Mint page to mint one!</Text>
-          ) : (
-            <SimpleGrid minChildWidth="120px" spacing="16px" gridTemplateColumns={`repeat(${numColumns}, 1fr)`}>
-              {myFighterIds.map((id) => (
-                <FighterCard key={id} fighter={id} isSelected={id === selectedFighterId} onClick={() => setSelectedFighterId(id)} />
-              ))}
-            </SimpleGrid>
+          {isConnected && (
+            <>
+              <Text>Hello {user} !</Text>
+              {myFighterIds.length === 0 ? (
+                <Text textAlign="center">You don&apos;t own any fighters yet. Go to the Mint page to mint one!</Text>
+              ) : (
+                <>
+                  <Text>Congratulations! You own {myFighterIds.length} Ultimate Fighters!</Text>
+                  <Text>Here are the fighters you own. Select one to fight!</Text>
+                  <SimpleGrid minChildWidth="120px" spacing="16px" gridTemplateColumns={`repeat(${numColumns}, 1fr)`}>
+                    {myFighterIds.map((id) => (
+                      <FighterCard key={id} fighter={id} isSelected={id === selectedFighterId} onClick={() => setSelectedFighterId(id)} />
+                    ))}
+                  </SimpleGrid>
+                </>
+              )}
+            </>
           )}
-          <Spacer />
-          <Spacer />
+          {!isConnected && (
+            <Text m="32px" fontStyle="oblique" textAlign="center">
+              Connect your wallet to see your fighters!
+            </Text>
+          )}
+
+          <Spacer m="8px" />
           <Heading as="h3" fontFamily="fantasy">
             Arenas
           </Heading>
-          <Text>Here are the arenas you can fight in.</Text>
-          {/* <Text>All arena data : {JSON.stringify(arenas)}</Text> */}
-          <SimpleGrid columns={4} spacing={5}>
-            {arenas.map((arena, index) => (
-              <Box p={4} key={index}>
-                <ArenaCard key={index} arenaId={index + 1} arena={arenas[index]} selectedFighter={selectedFighterId} />
-              </Box>
-            ))}
-          </SimpleGrid>
-        </div>
-      </main>
+          {isConnected && (
+            <>
+              <Text>Here are the arenas you can fight in.</Text>
+              <SimpleGrid columns={4} spacing={5}>
+                {arenas.map((arena, index) => (
+                  <Box p={4} key={index}>
+                    <ArenaCard key={index} arenaId={index + 1} arena={arenas[index]} selectedFighter={selectedFighterId} />
+                  </Box>
+                ))}
+              </SimpleGrid>
+            </>
+          )}
+          {!isConnected && (
+            <Text m="32px" fontStyle="oblique" textAlign="center">
+              Connect your wallet to see the arenas!
+            </Text>
+          )}
+        </Box>
+      </Box>
     </>
   )
 }
