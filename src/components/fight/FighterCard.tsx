@@ -189,12 +189,10 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
                   src={`data:image/png;base64,${myFighterImageBase64}`}
                   alt={myFighterTokenId}
                   objectFit="cover"
-                  onClick={onOpen}
                 />
                 <Badge colorScheme={RarityColors[myFighterStats.rarity]}>{Rarities[myFighterStats.rarity]}</Badge>
                 <Divider />
                 <Box>
-                  {/* <Text>Rarity: {Rarities[myFighterStats.rarity]}</Text> */}
                   <Text>Strength: {myFighterStats.strength}</Text>
                   <Text>Stamina: {myFighterStats.stamina}</Text>
                   <Text>Technique: {myFighterStats.technique}</Text>

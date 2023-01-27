@@ -1,5 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Address, useAccount, useContractRead, usePrepareContractWrite, useWaitForTransaction, useContractWrite } from 'wagmi'
+import {
+  Address,
+  useAccount,
+  useTransaction,
+  useContractRead,
+  useContractEvent,
+  usePrepareContractWrite,
+  useWaitForTransaction,
+  useContractWrite,
+} from 'wagmi'
 import abi from '../../../constants/abi.json'
 
 import {
@@ -18,9 +27,18 @@ import {
   Spacer,
   Toast,
   useToast,
+  ModalOverlay,
+  Modal,
+  useDisclosure,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  Spinner,
+  Divider,
 } from '@chakra-ui/react'
 import Fight from 'pages/fight'
-import { ethers } from 'ethers'
+import { ethers, providers } from 'ethers'
 
 export interface ArenaCardProps {
   matchId: number
@@ -38,6 +56,20 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
   const [modalTitle, setModalTitle] = useState<string>('')
   const [modalMessage, setModalMessage] = useState<string>('')
   const toast = useToast()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  useContractEvent({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address,
+    abi: abi,
+    eventName: 'MatchCreated',
+    listener(matchId: any, tokenId1: any, tokenId2: any, outcome: any) {
+      console.log('MatchCreated!')
+      console.log('Match Id : ' + matchId)
+      console.log('Token Id 1 : ' + tokenId1)
+      console.log('Token Id 2 : ' + tokenId2)
+      console.log('Outcome : ' + outcome)
+    },
+  })
 
   const {
     data: arenaData,
@@ -106,66 +138,75 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
         duration: 6000,
         isClosable: true,
       })
-    } else if (selectedFighter === arena.tokenId1 || selectedFighter === arena.tokenId2) {
-      if (arena.winnerId === selectedFighter) {
-        setModalTitle('Congratulations!')
-        setModalMessage('You won the arena match')
-        setModalOpen(true)
-      } else {
-        setModalTitle('Sorry')
-        setModalMessage('You lost the arena match')
-        setModalOpen(true)
-      }
+    } else if (selectedFighter === arena.tokenId1) {
+      toast({
+        title: 'Error',
+        description: 'You cannot join your own arena',
+        status: 'error',
+        duration: 6000,
+        isClosable: true,
+      })
     } else {
       if (config && write) {
+        onOpen()
         write()
       }
     }
   }
 
   return (
-    <Card>
-      <CardBody textAlign="center" rounded="lg" borderWidth={'1px'} borderColor={'gray.500'}>
-        <Text align="center" fontSize="2xl" fontFamily="fantasy" fontStyle="oblique">
-          Arena #{arenaId}
-        </Text>
-        <Spacer m="4px" />
-        <Box display="flex" alignItems="center" justifyContent="center">
-          {/* get arena1 image from public folder */}
-          <Image
-            src={'./images/arena1.jpg'}
-            alt={'ArenaImg'}
-            borderRadius="full"
-            boxSize="100px"
-            width="100px"
-            height="100px"
-            objectFit="contain"></Image>
-        </Box>
-        <Spacer m="8px" />
-        <Flex justifyContent="space-between" flexDirection="row">
-          <Text>Fighter 1: {arena.tokenId1}</Text>
-          <Text>Fighter 2: {arena.tokenId2}</Text>
-        </Flex>
-        <Spacer m="4px" />
-        <Button
-          colorScheme="blue"
-          // onClick={() => {
-          //   console.log('Join Arena')
-          //   if (selectedFighter === 0) {
-          //     console.log('Please select a fighter')
-          //   } else if (selectedFighter === arena.tokenId1 || selectedFighter === arena.tokenId2) {
-          //     console.log('You are already in this arena')
-          //   } else {
-          //     console.log('Joining arena')
-          //     joinArena()
-          //   }
-          // }}
-          onClick={joinArena}
-          variant="outline"
-          size="sm">
-          Join Arena
-        </Button>
-      </CardBody>
-    </Card>
+    <>
+      <Box>
+        <Card textAlign="center" rounded="lg" borderWidth="1px" borderColor="gray.500">
+          <CardHeader>
+            <Heading size="md">Arena #{arenaId}</Heading>
+          </CardHeader>
+          <Divider />
+          <CardBody>
+            <Box display="flex" alignItems="center" justifyContent="center">
+              <Image src={'./images/arena1.jpg'} alt={'ArenaImg'} borderRadius="full" width="100%" height="100%" objectFit="contain"></Image>
+            </Box>
+            <Spacer m="24px" />
+            <Flex justifyContent="space-between" flexDirection="row">
+              <Text>Fighter 1: {arena.tokenId1}</Text>
+              <Text>Fighter 2: {arena.tokenId2}</Text>
+            </Flex>
+            <Spacer m="4px" />
+            <Button colorScheme="blue" textAlign="center" onClick={joinArena} variant="outline" size="sm">
+              Join Arena
+            </Button>
+          </CardBody>
+
+          {/* <CardFooter justifyContent="center">
+            <Button colorScheme="blue" textAlign="center" onClick={joinArena} variant="outline" size="sm">
+              Join Arena
+            </Button>
+          </CardFooter> */}
+        </Card>
+      </Box>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Joining arena...</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Flex flexDir="column" justifyContent="center" alignItems="center">
+              {isLoading && (
+                <>
+                  <Spinner />
+                  <Text>Joining arena...</Text>
+                </>
+              )}
+              {isSuccess && (
+                <>
+                  <Text>Success!</Text>
+                  <Text>Transaction hash: {data?.hash}</Text>
+                </>
+              )}
+            </Flex>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
   )
 }
