@@ -1,4 +1,4 @@
-import { Box, Button, Container, Flex, Heading, Text } from '@chakra-ui/react'
+import { Box, Button, Container, Divider, Flex, Grid, GridItem, Heading, Text } from '@chakra-ui/react'
 import { Head } from 'components/layout/Head'
 import React, { useEffect, useRef, useState } from 'react'
 import { Address, useAccount, useContractRead, usePrepareContractWrite } from 'wagmi'
@@ -63,20 +63,43 @@ export default function Rankings() {
     <>
       <Head />
       <Heading as="h2">Rankings Page</Heading>
-      <Text>Welcome to the Ultimate Fighting Metaverse! Rankings Page</Text>
+      {/* <Text>Welcome to the Ultimate Fighting Metaverse! Rankings Page</Text> */}
+      <Divider m="4px" />
+      <Grid templateColumns="repeat(6, 1fr)" gap={4} m="4px">
+        <GridItem w="100%" textAlign="center">
+          <Text fontWeight="bold">Token Id</Text>
+        </GridItem>
+        <GridItem w="100%" textAlign="center">
+          Avatar
+        </GridItem>
+        <GridItem w="100%" textAlign="center">
+          Victories
+        </GridItem>
+        <GridItem w="100%" textAlign="center">
+          Stats
+        </GridItem>
+        <GridItem w="100%" textAlign="center">
+          Owner
+        </GridItem>
+        <GridItem w="100%" textAlign="center">
+          Details
+        </GridItem>
+      </Grid>
+      <Divider m="4px" />
       <Box width="100%" mx="auto" p={4}>
         {/* map through the current entries and display a RankingItem for each */}
         {currentEntries.map((fighterId) => (
           <RankingItem key={fighterId} fighter={fighterId} />
         ))}
       </Box>
-
-      <Button onClick={handlePreviousPage} disabled={currentPage === 1}>
-        Previous Page
-      </Button>
-      <Button onClick={handleNextPage} disabled={currentPage === Math.ceil(myFighterIds.length / entriesPerPage)}>
-        Next Page
-      </Button>
+      <Box display="flex" justifyContent="center">
+        <Button onClick={handlePreviousPage} disabled={currentPage === 1}>
+          Previous Page
+        </Button>
+        <Button onClick={handleNextPage} disabled={currentPage === Math.ceil(myFighterIds.length / entriesPerPage)}>
+          Next Page
+        </Button>
+      </Box>
     </>
   )
 }
