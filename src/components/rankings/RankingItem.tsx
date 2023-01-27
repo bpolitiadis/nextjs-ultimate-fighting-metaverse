@@ -110,16 +110,22 @@ export const RankingItem = ({ fighter }: { fighter: any }) => {
     }
   }, [tokenUrl])
 
+  // function to truncate long addresses
+  const truncateAddress = (address: string) => {
+    return address.slice(0, 8) + '...' + address.slice(-8)
+  }
+
   return (
     <>
       <Box>
         <Flex justify="space-between" align="center" flexDirection="row" width="100%" border="1px" borderRadius="lg" borderColor="gray.500">
-          <Text width="100%" textAlign="center" fontWeight="bold">
-            {fighter}
+          <Text width="100%" textAlign="center" fontWeight="bold" margin="12px">
+            #{fighter}
           </Text>
-          <Divider h={24} orientation="vertical" margin="12px" borderRadius="full" />
+          <Divider h={32} orientation="vertical" margin="4px" borderRadius="full" />
           <Image
             border="4px"
+            margin="4px"
             borderColor={myFighterStats.rarity ? RarityColors[myFighterStats.rarity] : 'gray.400'}
             borderRadius="md"
             width="15%"
@@ -127,12 +133,12 @@ export const RankingItem = ({ fighter }: { fighter: any }) => {
             src={`data:image/png;base64,${myFighterImageBase64}`}
             alt={'Fighter Image'}
           />
-          <Divider h={24} orientation="vertical" margin="12px" borderRadius="full" />
-          <Text flexGrow={1} width="100%" textAlign="center" justifyContent="center" fontWeight="bold">
+          <Divider h={32} orientation="vertical" margin="4px" borderRadius="full" />
+          <Text flexGrow={1} width="100%" textAlign="center" justifyContent="center" fontWeight="bold" margin="12px">
             {myFighterStats.victories}
           </Text>
-          <Divider h={24} orientation="vertical" margin="12px" borderRadius="full" />
-          <Stack width="100%" flexDir="column" flexWrap="nowrap" textAlign="center">
+          <Divider h={32} orientation="vertical" margin="4px" borderRadius="full" />
+          <Stack width="100%" flexDir="column" flexWrap="nowrap" textAlign="center" margin="12px">
             <Text width="100%" flexWrap="nowrap">
               Strength: {myFighterStats.strength}
             </Text>
@@ -143,19 +149,19 @@ export const RankingItem = ({ fighter }: { fighter: any }) => {
               Technique: {myFighterStats.technique}
             </Text>
           </Stack>
-          <Divider h={24} orientation="vertical" width="12px" borderRadius="full" />
-          <Text textAlign="center" justifyContent="center">
+          <Divider h={32} orientation="vertical" margin="4px" borderRadius="full" />
+          <Text textAlign="center" justifyContent="center" margin="12px">
             <Link
               flexWrap="nowrap"
               fontWeight="light"
               target="_blank"
               rel="noopener noreferrer"
               href={`https://mumbai.polygonscan.com/address/${owner}`}>
-              {owner}
+              {truncateAddress(owner)}
             </Link>
           </Text>
-          <Divider h={24} orientation="vertical" margin="12px" borderRadius="full" />
-          <Button colorScheme="blue" variant="outline" onClick={onOpen} width="100%">
+          <Divider h={32} orientation="vertical" margin="4px" borderRadius="full" />
+          <Button colorScheme="blue" variant="outline" onClick={onOpen} width="100%" margin="12px">
             Details
           </Button>
           <Modal isOpen={isOpen} onClose={onClose}>
