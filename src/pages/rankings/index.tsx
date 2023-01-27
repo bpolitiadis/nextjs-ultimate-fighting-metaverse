@@ -62,7 +62,9 @@ export default function Rankings() {
   return (
     <>
       <Head />
-      <Heading as="h2">Rankings Page</Heading>
+      <Heading as="h2" m="24px">
+        Rankings Page
+      </Heading>
       {/* <Text>Welcome to the Ultimate Fighting Metaverse! Rankings Page</Text> */}
       <Divider m="4px" />
       <Grid templateColumns="repeat(6, 1fr)" gap={4} m="4px">
@@ -70,19 +72,19 @@ export default function Rankings() {
           <Text fontWeight="bold">Token Id</Text>
         </GridItem>
         <GridItem w="100%" textAlign="center">
-          Avatar
+          <Text fontWeight="bold">Avatar</Text>
         </GridItem>
         <GridItem w="100%" textAlign="center">
-          Victories
+          <Text fontWeight="bold">Victories</Text>
         </GridItem>
         <GridItem w="100%" textAlign="center">
-          Stats
+          <Text fontWeight="bold">Stats</Text>
         </GridItem>
         <GridItem w="100%" textAlign="center">
-          Owner
+          <Text fontWeight="bold">Owner</Text>
         </GridItem>
         <GridItem w="100%" textAlign="center">
-          Details
+          <Text fontWeight="bold">Details</Text>
         </GridItem>
       </Grid>
       <Divider m="4px" />
