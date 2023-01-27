@@ -16,13 +16,11 @@ export default function Home() {
           Welcome to Ultimate Fighting Metaverse
         </Heading>
         <Box mt={4}>
-          <Text className="large-font" textAlign="center">
-            Where the ultimate fighters are born!
-          </Text>
+          <Text textAlign="center">Where the ultimate fighters are born!</Text>
         </Box>
 
         <Flex mt={6} align="center">
-          <Image src={images[0]} alt="fighter character" mr={6} w="80%" h="80%" />
+          <Image src={'./images/collage1.jpg'} alt="fighter character" mr={6} w="33%" h="33%" />
           <Text className="large-font">
             Are you ready to create your own unstoppable warrior? With just a few clicks, you can customize your fighter&apos;s appearance and let our
             AI art wizard, DALL-e, bring your creation to life.
@@ -33,7 +31,7 @@ export default function Home() {
             But the fun doesn&apos;t stop there - your fighter &apos; s stats and rarity are determined by the roll of the dice, so to speak. Will you
             be the proud owner of a rare and powerful champion, or will you have to train and grind your way to the top?
           </Text>
-          <Image src={images[1]} alt="DALL-e AI art wizard" w="60%" h="60%" />
+          <Image src={images[1]} alt="DALL-e AI art wizard" w="50%" h="50%" />
         </Flex>
         <Box mt={6}>
           <Container className="large-font" textAlign="center">
