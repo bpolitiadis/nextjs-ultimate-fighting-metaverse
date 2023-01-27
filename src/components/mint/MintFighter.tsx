@@ -59,7 +59,6 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
     abi: abi,
     eventName: 'FighterCreated',
     listener(tokenID: any, fighterData: any) {
-      console.log('FighterCreated ', tokenID.toNumber(), '\nFighter Stats:', JSON.stringify(fighterData as FighterCardProps))
       setMyTokenID(tokenID.toNumber())
       setMyFighterStats({
         strength: fighterData.strength.toNumber(),
@@ -68,7 +67,9 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
         rarity: fighterData.rarity,
         victories: fighterData.victories.toNumber(),
       })
-      console.log('Fighter Stats:', JSON.stringify(myFighterStats as FighterCardProps))
+      // console.log('Fighter Created!')
+      // console.log('Token ID:', myTokenID)
+      // console.log('Fighter Stats:', JSON.stringify(myFighterStats as FighterCardProps))
     },
   })
 
