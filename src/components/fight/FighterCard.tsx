@@ -133,6 +133,7 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
         rounded="lg"
         borderWidth={isSelected ? '2px' : '1px'}
         borderColor={isSelected ? 'blue.200' : 'gray.500'}
+        cursor="pointer"
         // bgColor={myFighterStats.rarity ? rarityColors[myFighterStats.rarity] : 'gray.400'}
         onClick={() => onClick(fighter)}>
         <CardHeader>
@@ -143,6 +144,7 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
         <CardBody textAlign="center">
           <Stack>
             <Image
+              cursor="pointer"
               border="4px"
               borderColor={myFighterStats.rarity ? RarityColors[myFighterStats.rarity] : 'gray.400'}
               borderRadius="md"
