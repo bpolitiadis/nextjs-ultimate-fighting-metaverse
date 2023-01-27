@@ -1,5 +1,5 @@
 import styles from 'styles/Home.module.css'
-import { Flex, Box, Image, Heading, Text, Link, Center } from '@chakra-ui/react'
+import { Flex, Box, Image, Heading, Text, Link, Center, Container } from '@chakra-ui/react'
 import { Head } from 'components/layout/Head'
 import { SITE_DESCRIPTION, SITE_NAME } from 'utils/config'
 
@@ -12,13 +12,11 @@ export default function Home() {
   return (
     <>
       <Box px={6} py={8}>
-        <Flex mx="auto" align="center" justify="center">
-          <Heading as="h1" size="xl" textAlign="center" justifyContent="center">
-            Welcome to Ultimate Fighting Metaverse
-          </Heading>
-        </Flex>
+        <Heading as="h1" size="xl" textAlign="center" justifyContent="center" mx="auto">
+          Welcome to Ultimate Fighting Metaverse
+        </Heading>
         <Box mt={4}>
-          <Text className="large-font" style={{ textAlign: 'center' }}>
+          <Text className="large-font" textAlign="center">
             Where the ultimate fighters are born!
           </Text>
         </Box>
@@ -38,10 +36,10 @@ export default function Home() {
           <Image src={images[1]} alt="DALL-e AI art wizard" w="60%" h="60%" />
         </Flex>
         <Box mt={6}>
-          <Text className="large-font">
+          <Container className="large-font" textAlign="center">
             Join the ranks of the Ultimate Fighting Metaverse and see if you have what it takes to become the ultimate champion. Mint your own
             Ultimate Fighter today and let the battles begin!
-          </Text>
+          </Container>
         </Box>
       </Box>
     </>
