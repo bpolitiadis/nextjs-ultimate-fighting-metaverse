@@ -1,0 +1,26 @@
+export const messages = {
+  winningMessages: [
+    'Looks like your opponents just got served a side of humble pie.',
+    "You just showed your opponents that you're not just a black belt in martial arts, but in sarcasm too.",
+    'Looks like your opponents just got knocked out of their own league.',
+    'You just proved that victory tastes sweeter than defeat.',
+    'Looks like your opponents just got schooled in more ways than one.',
+    'You just took the competition to the mat and made them tap out.',
+    'Looks like your opponents just got served a roundhouse kick to their ego.',
+    'You just knocked the competition out of the tournament and into obscurity.',
+    'Looks like your opponents just got the ultimate tap out of reality.',
+    "You just KO'd the competition and proved yourself to be the ultimate champion.",
+  ],
+  losingMessages: [
+    'Looks like you just got kicked when you were already down.',
+    'You just got beat by a better opponent, but at least you tried.',
+    "Looks like you're the one taking a knee and a loss.",
+    "You just got knocked out of the competition, but don't worry, there's always next time.",
+    "Looks like you're the one seeing stars, but don't worry, you'll get back up.",
+    "You just got owned, but don't worry, you'll have another chance to shine.",
+    "Looks like you're the one on the mat, but don't worry, you'll get back up and fight again.",
+    "You just got taken down a notch, but don't worry, you'll come back stronger.",
+    "Looks like you're the one getting a taste of defeat, but don't worry, it'll make your victory that much sweeter.",
+    "You just got beat at your own game, but don't worry, you'll come back even better next time.",
+  ],
+}

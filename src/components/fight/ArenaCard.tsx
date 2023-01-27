@@ -10,6 +10,8 @@ import {
   useContractWrite,
 } from 'wagmi'
 import abi from '../../../constants/abi.json'
+//import an svg image from /public/svg/gold-cup.svg
+// import goldCup from '../../../public/svg/gold-cup.svg'
 
 import {
   Card,
@@ -39,6 +41,7 @@ import {
 } from '@chakra-ui/react'
 import Fight from 'pages/fight'
 import { ethers, providers } from 'ethers'
+import { messages } from '../../../constants/dictionary'
 
 export interface ArenaCardProps {
   matchId: number
@@ -201,27 +204,23 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
               Join Arena
             </Button>
           </CardBody>
-
-          {/* <CardFooter justifyContent="center">
-            <Button colorScheme="blue" textAlign="center" onClick={joinArena} variant="outline" size="sm">
-              Join Arena
-            </Button>
-          </CardFooter> */}
         </Card>
       </Box>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          {isLoading && (
-            <>
-              <ModalHeader textAlign="center">Joining the arena...</ModalHeader>
-            </>
-          )}
-          {isSuccess && (
-            <>
-              <ModalHeader textAlign="center">Joined the arena!</ModalHeader>
-            </>
-          )}
+          <ModalHeader textAlign="center">
+            {isLoading && (
+              <>
+                <Text textAlign="center">Joining the arena...</Text>
+              </>
+            )}
+            {isSuccess && (
+              <>
+                <Text textAlign="center">Joined the arena!</Text>
+              </>
+            )}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {isLoading && (
@@ -238,7 +237,7 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
               <>
                 {myArena.tokenId2 == 0 && (
                   <>
-                    <Text verticalAlign="center" m="16px" fontStyle="oblique">
+                    <Text verticalAlign="center" m="16px" fontStyle="oblique" justifyContent="center">
                       Waiting for another fighter to join...
                     </Text>
                   </>
@@ -247,16 +246,37 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
                   <>
                     {myArena.winnerId == selectedFighter && (
                       <>
-                        <Text>You won!</Text>
+                        <Flex flexDir="column" justifyContent="center" alignItems="center">
+                          <Image src={'./svg/gold-cup.svg'} alt="Victory" width="15%" height="15%" />
+                          <Text fontWeight="bold" fontSize="2xl" textAlign="center">
+                            You won!
+                          </Text>
+                          <Text fontSize="md" fontStyle="oblique" textAlign="center">
+                            {messages.winningMessages[Math.floor(Math.random() * messages.winningMessages.length)]}
+                          </Text>
+                        </Flex>
                       </>
                     )}
                     {myArena.winnerId != selectedFighter && (
                       <>
-                        <Text>You lost!</Text>
+                        <Flex flexDir="column" justifyContent="center" alignItems="center">
+                          <Image src={'./svg/sad-face.svg'} alt="Victory" width="15%" height="15%" />
+                          <Text fontWeight="bold" fontSize="2xl" textAlign="center">
+                            You lost!
+                          </Text>
+                          <Text fontSize="md" fontStyle="oblique" textAlign="center">
+                            {messages.losingMessages[Math.floor(Math.random() * messages.losingMessages.length)]}
+                          </Text>
+                        </Flex>
                       </>
                     )}
                   </>
                 )}
+              </>
+            )}
+            {isError && (
+              <>
+                <Text textAlign="center">Something went wrong</Text>
               </>
             )}
           </ModalBody>
