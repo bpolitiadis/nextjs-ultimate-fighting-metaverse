@@ -14,7 +14,8 @@ export const SOCIAL_TWITTER = 'vpol24'
 export const SOCIAL_GITHUB = 'bpolitiadis/nextjs-ultimate-fighting-metaverse'
 
 // export const ETH_CHAINS = [mainnet, goerli, sepolia, polygon, optimism, arbitrum, polygonMumbai]
-export const ETH_CHAINS = [mainnet, goerli, polygon, polygonMumbai]
+// export const ETH_CHAINS = [polygonMumbai, mainnet, goerli, polygon]
+export const ETH_CHAINS = [polygonMumbai]
 
 export const SERVER_SESSION_SETTINGS = {
   cookieName: SITE_NAME,
