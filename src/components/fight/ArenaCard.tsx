@@ -49,12 +49,12 @@ export interface ArenaCardProps {
 }
 
 export const ArenaCard = ({
-  arenaId,
+  arenaNo,
   arena,
   selectedFighter,
   handleSetArena,
 }: {
-  arenaId: number
+  arenaNo: number
   arena: ArenaCardProps
   selectedFighter: number
   handleSetArena: (index: number, arena: ArenaCardProps) => void
@@ -82,7 +82,7 @@ export const ArenaCard = ({
       console.log('Token Id 1 : ' + tokenId1)
       console.log('Token Id 2 : ' + tokenId2)
       console.log('Outcome : ' + outcome)
-      handleSetArena(arenaId, {
+      handleSetArena(arenaNo, {
         matchId: matchId.toNumber(),
         tokenId1: tokenId1.toNumber(),
         tokenId2: tokenId2.toNumber(),
@@ -96,6 +96,7 @@ export const ArenaCard = ({
         winnerId: outcome.toNumber(),
       })
     },
+    // once: true,
   })
 
   useContractEvent({
@@ -113,7 +114,6 @@ export const ArenaCard = ({
         tokenId2: 0,
         winnerId: 0,
       })
-
       setMyArena({
         matchId: 0,
         tokenId1: tokenId.toNumber(),
@@ -121,6 +121,7 @@ export const ArenaCard = ({
         winnerId: 0,
       })
     },
+    // once: true,
   })
 
   const {
@@ -131,7 +132,7 @@ export const ArenaCard = ({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address,
     abi: abi,
     functionName: 'getArena',
-    args: [arenaId],
+    args: [arenaNo],
   })
 
   const {
@@ -153,8 +154,8 @@ export const ArenaCard = ({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address,
     abi: abi,
     functionName: 'joinArena',
-    args: [arenaId, selectedFighter],
-    enabled: Boolean(arenaId) && Boolean(selectedFighter),
+    args: [arenaNo, selectedFighter],
+    enabled: Boolean(arenaNo) && Boolean(selectedFighter),
     overrides: {
       value: ethers.utils.parseEther('0.01'),
     },
@@ -167,7 +168,7 @@ export const ArenaCard = ({
     onSuccess: () => {
       console.log(JSON.stringify(data))
       setMyArena(arenaData as ArenaCardProps)
-      handleSetArena(arenaId, arenaData as ArenaCardProps)
+      handleSetArena(arenaNo, arenaData as ArenaCardProps)
       toast({
         title: 'Success',
         description: 'You have joined the arena',
@@ -245,13 +246,13 @@ export const ArenaCard = ({
       <Box>
         <Card textAlign="center" rounded="lg" borderWidth="1px" borderColor="gray.500">
           <CardHeader>
-            <Heading size="md">Arena #{arenaId}</Heading>
+            <Heading size="md">Arena #{arenaNo}</Heading>
           </CardHeader>
           <Divider />
           <CardBody>
             <Box alignItems="center" justifyContent="center">
               <Image
-                src={`./images/arena${arenaId}.jpg`}
+                src={`./images/arena${arenaNo}.jpg`}
                 alt={'ArenaImg'}
                 borderRadius="3xl"
                 border="1px"
