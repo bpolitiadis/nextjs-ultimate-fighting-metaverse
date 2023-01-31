@@ -1,4 +1,4 @@
-import { Heading, Text, Button, Image, Grid, Flex, SimpleGrid, Spacer, Box, Container, Center } from '@chakra-ui/react'
+import { Heading, Text, Button, Image, Grid, Flex, SimpleGrid, Spacer, Box, Container, Center, Link } from '@chakra-ui/react'
 import { Head } from 'components/layout/Head'
 import React, { useEffect, useRef, useState } from 'react'
 import { Address, useAccount, useContractRead, usePrepareContractWrite } from 'wagmi'
@@ -118,9 +118,14 @@ export default function Fight() {
             </>
           )}
           {!isConnected && (
-            <Text m="32px" fontStyle="oblique" textAlign="center">
-              Connect your wallet to see your fighters!
-            </Text>
+            <>
+              <Text m="32px" fontStyle="oblique" textAlign="center">
+                Connect your wallet to see your fighters!
+                <Link href="https://chainlist.org/chain/80001" target="_blank" rel="noopener noreferrer">
+                  <Text fontSize="xs">Add Mumbai Testnet to Metamask</Text>
+                </Link>
+              </Text>
+            </>
           )}
 
           <Spacer m="8px" />
@@ -135,7 +140,7 @@ export default function Fight() {
                   <Box p={4} key={index}>
                     <ArenaCard
                       key={index}
-                      arenaId={index + 1}
+                      arenaNo={index + 1}
                       arena={arenas[index]}
                       selectedFighter={selectedFighterId}
                       handleSetArena={handleSetArena}
@@ -146,9 +151,14 @@ export default function Fight() {
             </>
           )}
           {!isConnected && (
-            <Text m="32px" fontStyle="oblique" textAlign="center">
-              Connect your wallet to see the arenas!
-            </Text>
+            <>
+              <Text m="32px" fontStyle="oblique" textAlign="center">
+                Connect your wallet to see your fighters!
+                <Link href="https://chainlist.org/chain/80001" target="_blank" rel="noopener noreferrer">
+                  <Text fontSize="xs">Add Mumbai Testnet to Metamask</Text>
+                </Link>
+              </Text>
+            </>
           )}
         </Box>
       </Box>

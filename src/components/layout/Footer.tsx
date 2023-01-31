@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Text } from '@chakra-ui/react'
+import { Divider, Flex, Link, Text, Image, Box } from '@chakra-ui/react'
 import { FaGithub, FaTwitter } from 'react-icons/fa'
 import { LinkComponent } from './LinkComponent'
 import { SITE_DESCRIPTION, SOCIAL_GITHUB, SOCIAL_TWITTER } from 'utils/config'
@@ -23,6 +23,20 @@ export function Footer(props: Props) {
           <FaTwitter />
         </LinkComponent>
       </Flex>
+
+      <Text fontSize="sm" mt={4} textAlign="center">
+        To use the application, add Mumbai Testnet to Metamask and get some test MATIC from the faucet.
+      </Text>
+
+      <Box display="flex" alignItems="center" mt={4}>
+        <Link href="https://chainlist.org/chain/80001" target="_blank" rel="noopener noreferrer">
+          <Text fontSize="sm">Add Mumbai Network</Text>
+        </Link>
+        <Box w="1px" h="12px" bg="gray.400" mx={4} />
+        <Link href="https://mumbaifaucet.com/" target="_blank" rel="noopener noreferrer">
+          <Text fontSize="sm">Mumbai Faucet</Text>
+        </Link>
+      </Box>
     </Flex>
   )
 }

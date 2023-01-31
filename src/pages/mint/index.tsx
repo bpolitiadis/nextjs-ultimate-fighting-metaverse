@@ -1,4 +1,4 @@
-import { Heading, Text, Button, Image, Spacer, Box } from '@chakra-ui/react'
+import { Heading, Text, Button, Image, Spacer, Box, Link } from '@chakra-ui/react'
 import { Head } from 'components/layout/Head'
 import React, { useEffect, useRef, useState } from 'react'
 import { ImagesResponseDataInner, OpenAIApi } from 'openai'
@@ -46,7 +46,10 @@ export default function Mint() {
         {!isConnected && (
           <>
             <Text m="32px" fontStyle="oblique" textAlign="center">
-              Please connect your wallet to continue.
+              Connect your wallet to see your fighters!
+              <Link href="https://chainlist.org/chain/80001" target="_blank" rel="noopener noreferrer">
+                <Text fontSize="xs">Add Mumbai Testnet to Metamask</Text>
+              </Link>
             </Text>
           </>
         )}
