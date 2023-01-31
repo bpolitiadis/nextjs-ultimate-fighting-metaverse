@@ -198,7 +198,7 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
             <Box
               key={img.b64_json}
               borderWidth={selectedImageIndex === index ? '3px' : '1px'}
-              borderColor={selectedImageIndex === index ? 'yellow.200' : 'gray.200'}
+              borderColor={selectedImageIndex === index ? 'gold' : 'gray.200'}
               m="4px"
               rounded={selectedImageIndex === index ? 'md' : 'sm'}
               onClick={() => {

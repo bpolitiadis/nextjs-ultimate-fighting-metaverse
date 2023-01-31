@@ -65,7 +65,7 @@ export default function CreateFighter({
   )
 
   const create = async () => {
-    console.log(text)
+    // console.log(text)
     try {
       onOpen()
       const response = await oai.current.createImage({
