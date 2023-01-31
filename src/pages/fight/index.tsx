@@ -15,6 +15,13 @@ export default function Fight() {
   const [selectedFighterId, setSelectedFighterId] = useState<number>(0)
   const [numColumns, setNumColumns] = useState(4)
 
+  //Handle setArenas for one specific arena index
+  const handleSetArena = (index: number, arena: ArenaCardProps) => {
+    const newArenas = arenas
+    newArenas[index] = arena
+    setArenas(newArenas)
+  }
+
   const {
     data: fighterData,
     isError: fighterError,
@@ -65,6 +72,7 @@ export default function Fight() {
       }
       //set the state of the arenas array
       setArenas(arenaArray)
+      console.log('arenas : ', arenaArray)
     }
   }, [arenaData])
 
@@ -125,7 +133,13 @@ export default function Fight() {
               <SimpleGrid columns={4} spacing={0}>
                 {arenas.map((arena, index) => (
                   <Box p={4} key={index}>
-                    <ArenaCard key={index} arenaId={index + 1} arena={arenas[index]} selectedFighter={selectedFighterId} />
+                    <ArenaCard
+                      key={index}
+                      arenaId={index + 1}
+                      arena={arenas[index]}
+                      selectedFighter={selectedFighterId}
+                      handleSetArena={handleSetArena}
+                    />
                   </Box>
                 ))}
               </SimpleGrid>

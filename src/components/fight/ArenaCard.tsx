@@ -8,11 +8,9 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction,
   useContractWrite,
+  useProvider,
 } from 'wagmi'
 import abi from '../../../constants/abi.json'
-//import an svg image from /public/svg/gold-cup.svg
-// import goldCup from '../../../public/svg/gold-cup.svg'
-
 import {
   Card,
   CardHeader,
@@ -27,7 +25,6 @@ import {
   Flex,
   Button,
   Spacer,
-  Toast,
   useToast,
   ModalOverlay,
   Modal,
@@ -38,10 +35,11 @@ import {
   ModalBody,
   Spinner,
   Divider,
+  Avatar,
 } from '@chakra-ui/react'
-import Fight from 'pages/fight'
 import { ethers, providers } from 'ethers'
 import { messages } from '../../../constants/dictionary'
+import { ipfsGatewayReplace } from 'utils/helpers/helpers'
 
 export interface ArenaCardProps {
   matchId: number
@@ -50,14 +48,27 @@ export interface ArenaCardProps {
   winnerId: number
 }
 
-export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number; arena: ArenaCardProps; selectedFighter: number }) => {
+export const ArenaCard = ({
+  arenaId,
+  arena,
+  selectedFighter,
+  handleSetArena,
+}: {
+  arenaId: number
+  arena: ArenaCardProps
+  selectedFighter: number
+  handleSetArena: (index: number, arena: ArenaCardProps) => void
+}) => {
   const { address: user, isConnecting, isDisconnected, isConnected } = useAccount()
+  const provider = useProvider()
+  const contract = new ethers.Contract(process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address, abi, provider)
 
   const [tokenId1, setTokenId1] = useState<number>(0)
+  const [tokenId2, setTokenId2] = useState<number>(0)
+  const [token1Url, setToken1Url] = useState<string>('')
+  const [token2Url, setToken2Url] = useState<string>('')
+  const [token1Image64, setToken1Image64] = useState<string>('')
   const [myArena, setMyArena] = useState<ArenaCardProps>(arena)
-  const [modalOpen, setModalOpen] = useState<boolean>(false)
-  const [modalTitle, setModalTitle] = useState<string>('')
-  const [modalMessage, setModalMessage] = useState<string>('')
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -71,6 +82,13 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
       console.log('Token Id 1 : ' + tokenId1)
       console.log('Token Id 2 : ' + tokenId2)
       console.log('Outcome : ' + outcome)
+      handleSetArena(arenaId, {
+        matchId: matchId.toNumber(),
+        tokenId1: tokenId1.toNumber(),
+        tokenId2: tokenId2.toNumber(),
+        winnerId: outcome.toNumber(),
+      })
+
       setMyArena({
         matchId: matchId.toNumber(),
         tokenId1: tokenId1.toNumber(),
@@ -89,6 +107,13 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
       console.log('Arena Id : ' + arenaId)
       console.log('Token Id : ' + tokenId)
       setTokenId1(tokenId)
+      handleSetArena(arenaId.toNumber(), {
+        matchId: 0,
+        tokenId1: tokenId.toNumber(),
+        tokenId2: 0,
+        winnerId: 0,
+      })
+
       setMyArena({
         matchId: 0,
         tokenId1: tokenId.toNumber(),
@@ -107,6 +132,17 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
     abi: abi,
     functionName: 'getArena',
     args: [arenaId],
+  })
+
+  const {
+    data: tokenUrl,
+    isError: tokenUrlError,
+    isLoading: tokenUrlLoading,
+  } = useContractRead({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address,
+    abi: abi,
+    functionName: 'tokenURI',
+    args: [arena.tokenId1],
   })
 
   const {
@@ -130,7 +166,8 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
     hash: data?.hash,
     onSuccess: () => {
       console.log(JSON.stringify(data))
-      // setMyArena(arenaData as ArenaCardProps)
+      setMyArena(arenaData as ArenaCardProps)
+      handleSetArena(arenaId, arenaData as ArenaCardProps)
       toast({
         title: 'Success',
         description: 'You have joined the arena',
@@ -151,11 +188,32 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
     },
   })
 
+  // useEffect(() => {
+  //   if (arenaData) {
+  //     setMyArena(arenaData as ArenaCardProps)
+  //   }
+  // }, [arenaData])
+
   useEffect(() => {
-    if (arenaData) {
-      setMyArena(arenaData as ArenaCardProps)
+    if (tokenUrl) {
+      // setMyTokenUrl(tokenUrl.toString())
+      const fetchMetadata = async () => {
+        try {
+          const response = await fetch(ipfsGatewayReplace(tokenUrl.toString()))
+          if (response.ok) {
+            const jsonResponse = await response.json()
+            setToken1Image64(jsonResponse.imageBase64)
+            // setMyFighterTokenId(jsonResponse.tokenID)
+          } else {
+            console.log('Error fetching metadata: ' + response.statusText)
+          }
+        } catch (error) {
+          console.log('Error fetching metadata: ' + error)
+        }
+      }
+      fetchMetadata()
     }
-  }, [arenaData])
+  }, [tokenUrl])
 
   async function joinArena() {
     if (selectedFighter === 0) {
@@ -191,16 +249,39 @@ export const ArenaCard = ({ arenaId, arena, selectedFighter }: { arenaId: number
           </CardHeader>
           <Divider />
           <CardBody>
-            <Box display="flex" alignItems="center" justifyContent="center">
-              <Image src={`./images/arena${arenaId}.jpg`} alt={'ArenaImg'} borderRadius="full" width="100%" height="100%" objectFit="contain"></Image>
+            <Box alignItems="center" justifyContent="center">
+              <Image
+                src={`./images/arena${arenaId}.jpg`}
+                alt={'ArenaImg'}
+                borderRadius="3xl"
+                border="1px"
+                borderColor="chakra-subtle-bg"
+                width="100%"
+                height="100%"
+                objectFit="contain"></Image>
             </Box>
             <Spacer m="24px" />
-            <Flex justifyContent="space-between" flexDirection="row">
-              <Text>Fighter 1: {arena.tokenId1}</Text>
-              <Text>Fighter 2: {arena.tokenId2}</Text>
+            <Flex flexDirection="row" alignItems="center" justifyContent="center">
+              {arena.tokenId1 !== 0 && (
+                <>
+                  <Flex flexDirection="row" align="center" justifyContent="center">
+                    <Avatar src={`data:image/png;base64,${token1Image64}`} />
+                    <Spacer m="4px" />
+                    <Text> #{arena.tokenId1} waiting</Text>
+                  </Flex>
+                </>
+              )}
+              {arena.tokenId1 == 0 && (
+                <>
+                  <Text align="center" justifyContent="center">
+                    Arena is empty.
+                  </Text>
+                </>
+              )}
             </Flex>
-            <Spacer m="4px" />
-            <Button colorScheme="blue" textAlign="center" onClick={joinArena} variant="outline" size="sm">
+
+            <Spacer m="24px" />
+            <Button colorScheme="blue" onClick={joinArena} variant="outline" size="sm">
               Join Arena
             </Button>
           </CardBody>
