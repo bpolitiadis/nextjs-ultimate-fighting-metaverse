@@ -287,7 +287,7 @@ export const ArenaCard = ({
           </CardBody>
         </Card>
       </Box>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered blockScrollOnMount={false}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader textAlign="center">
