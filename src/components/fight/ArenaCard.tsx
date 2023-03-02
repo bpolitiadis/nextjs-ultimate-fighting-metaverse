@@ -96,7 +96,7 @@ export const ArenaCard = ({
         winnerId: outcome.toNumber(),
       })
     },
-    // once: true,
+    once: true,
   })
 
   useContractEvent({
@@ -121,7 +121,7 @@ export const ArenaCard = ({
         winnerId: 0,
       })
     },
-    // once: true,
+    once: true,
   })
 
   const {
@@ -214,7 +214,7 @@ export const ArenaCard = ({
       }
       fetchMetadata()
     }
-  }, [tokenUrl])
+  }, [])
 
   async function joinArena() {
     if (selectedFighter === 0) {

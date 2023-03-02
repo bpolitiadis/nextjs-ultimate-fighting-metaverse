@@ -18,6 +18,7 @@ import {
   ModalHeader,
   ModalBody,
   useDisclosure,
+  Badge,
 } from '@chakra-ui/react'
 import React, { useEffect, useRef, useState } from 'react'
 import { Address, useAccount, useContractRead, usePrepareContractWrite } from 'wagmi'
@@ -26,6 +27,7 @@ import css from '../../styles/rankings.module.css'
 import { FighterCardProps, Rarities, RarityColors } from '../../components/fight/FighterCard'
 import { ipfsGatewayReplace } from 'utils/helpers/helpers'
 import { ExternalLinkIcon } from '@chakra-ui/icons'
+import { FighterModal } from 'components/common/FighterModal'
 
 export const RankingItem = ({ fighter }: { fighter: any }) => {
   const [myFighterStats, setMyFighterStats] = useState<FighterCardProps>({
@@ -164,7 +166,15 @@ export const RankingItem = ({ fighter }: { fighter: any }) => {
           <Button colorScheme="blue" variant="outline" onClick={onOpen} width="100%" margin="12px">
             Details
           </Button>
-          <Modal isOpen={isOpen} onClose={onClose}>
+          <FighterModal
+            isOpen={isOpen}
+            onClose={onClose}
+            fighter={fighter}
+            fighterStats={myFighterStats}
+            fighterImageBase64={myFighterImageBase64}
+            owner={owner}
+          />
+          {/* <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent textAlign="center">
               <ModalHeader fontFamily="fantasy" fontStyle="oblique">
@@ -203,7 +213,7 @@ export const RankingItem = ({ fighter }: { fighter: any }) => {
                 </Container>
               </ModalBody>
             </ModalContent>
-          </Modal>
+          </Modal> */}
         </Flex>
       </Box>
     </>

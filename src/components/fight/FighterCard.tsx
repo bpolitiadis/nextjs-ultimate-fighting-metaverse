@@ -29,6 +29,7 @@ import {
 } from '@chakra-ui/react'
 import { ThemeContext } from '@emotion/react'
 import { ipfsGatewayReplace } from 'utils/helpers/helpers'
+import { FighterModal } from 'components/common/FighterModal'
 
 export interface FighterCardProps {
   strength: number
@@ -52,7 +53,7 @@ export const RarityColors: any = {
   3: 'yellow',
 }
 
-export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; isSelected: boolean; onClick: any }) => {
+export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: number; isSelected: boolean; onClick: any }) => {
   const [myFighterStats, setMyFighterStats] = useState<FighterCardProps>({
     strength: 0,
     stamina: 0,
@@ -63,9 +64,9 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
   const [myTokenUrl, setMyTokenUrl] = useState<string>('')
   const [myFighterImage, setMyFighterImage] = useState<string>('')
   const [myFighterImageBase64, setMyFighterImageBase64] = useState<string>('')
-  const [myFighterBlobURI, setMyFighterBlobURI] = useState<string>('')
   const [myFighterTokenId, setMyFighterTokenId] = useState<string>('')
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [owner, setOwner] = useState<string>('')
 
   const {
     data: fighterStatsData,
@@ -89,6 +90,17 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
     args: [fighter],
   })
 
+  const {
+    data: ownerData,
+    isError: ownerDataError,
+    isLoading: ownerDataLoading,
+  } = useContractRead({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as Address,
+    abi: abi,
+    functionName: 'getOwner',
+    args: [fighter],
+  })
+
   const theme = useTheme()
 
   useEffect(() => {
@@ -100,7 +112,7 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
       const [strength, stamina, technique, rarity, victories] = fighterStatsArray
       setMyFighterStats({ strength, stamina, technique, rarity, victories })
     }
-  }, [fighterStatsData])
+  }, [])
 
   useEffect(() => {
     if (tokenUrl) {
@@ -112,7 +124,6 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
             const jsonResponse = await response.json()
             setMyFighterImage(jsonResponse.image)
             setMyFighterImageBase64(jsonResponse.imageBase64)
-            setMyFighterBlobURI(jsonResponse.blobURI)
             setMyFighterTokenId(jsonResponse.tokenID)
           } else {
             console.log('Error fetching metadata: ' + response.statusText)
@@ -123,7 +134,13 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
       }
       fetchMetadata()
     }
-  }, [tokenUrl])
+  }, [])
+
+  useEffect(() => {
+    if (ownerData) {
+      setOwner(ownerData.toString())
+    }
+  }, [ownerData])
 
   return (
     <Box width={['85%', '80%', '75%']} mx="auto" my={4}>
@@ -172,7 +189,15 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
           </Button>
         </CardFooter> */}
       </Card>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <FighterModal
+        isOpen={isOpen}
+        onClose={onClose}
+        fighter={fighter}
+        fighterStats={myFighterStats}
+        fighterImageBase64={myFighterImageBase64}
+        owner={owner}
+      />
+      {/* <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent textAlign="center">
           <ModalHeader fontFamily="fantasy" fontStyle="oblique">
@@ -203,7 +228,7 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: any; is
             </Box>
           </ModalBody>
         </ModalContent>
-      </Modal>
+      </Modal> */}
     </Box>
   )
 }
