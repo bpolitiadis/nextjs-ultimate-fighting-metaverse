@@ -13,7 +13,7 @@ export function NetworkStatus() {
 
   return (
     <Flex alignItems="center" gap={2} zIndex={2} bgColor={bgColor} p={1}>
-      <Badge colorScheme={GetNetworkColor(network.chain?.network)} fontSize="2xs">
+      {/* <Badge colorScheme={GetNetworkColor(network.chain?.network)} fontSize="2xs">
         {network.chain?.name ?? 'Ethereum'}
       </Badge>
       {explorerUrl && (
@@ -21,7 +21,7 @@ export function NetworkStatus() {
           <Text fontSize="2xs"># {block.data}</Text>
         </LinkComponent>
       )}
-      {!explorerUrl && <Text fontSize="2xs"># {block.data}</Text>}
+      {!explorerUrl && <Text fontSize="2xs"># {block.data}</Text>} */}
     </Flex>
   )
 }
