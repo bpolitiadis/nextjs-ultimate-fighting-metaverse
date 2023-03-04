@@ -37,4 +37,17 @@ export const content = {
     'But let’s not forget about the technologies that make all of this possible. We’re talking about OpenAI’s DALL-E, Ethereum Solidity, Nextjs, Web3, and the Metaverse. With these cutting-edge technologies, we’re able to bring you a truly unique and immersive web3 fighting experience. So thank you, technology, for making our wildest dreams a reality.',
   home_description5:
     'In conclusion, our web3 dApp fighting game is the perfect blend of AI-generated uniqueness and competitive gameplay. So go mint your own fighter, put them to the test, and show the world who’s boss. With the help of OpenAI, Ethereum, and the Metaverse, the possibilities are endless. See you in the ring!',
+  about_title: 'About Ultimate Fighting Metaverse',
+  about_text1:
+    'Once upon a time, in the ancient land of Athens, Greece, there lived a man named Bill. Bill was a man of simple pleasures - he enjoyed a cold beer on a hot day, a good book on a rainy one, and the occasional video game to pass the time. But one day, Bill grew tired of the same old routine. He found himself feeling unfulfilled, like there was something missing in his life. And so, he began to explore the world of Web3 development.',
+  about_text2:
+    'At first, Bill was a bit intimidated. He had never been one for coding or programming, but he was determined to learn. He dove headfirst into the world of Solidity and EVM smart contracts, mastering the ins and outs of Hardhat and NextJS. He was particularly fond of the wagmi library and chakra-ui, which made building frontend applications a breeze.',
+  about_text3:
+    'As Bill learned more and more about Web3, he found himself becoming more and more obsessed. He spent hours upon hours tinkering with code and experimenting with new technologies. And before long, he had created something truly special - a portfolio dApp called Ultimate Fighting Metaverse.',
+  about_text4:
+    'The Ultimate Fighting Metaverse was a place where users could create and customize their own fighter avatars, using DALL-E to generate unique images. These avatars could then be minted into NFTs on the Polygon Network and used to battle in virtual arenas. As users fought and won battles, their NFTs would gain new abilities and stats, becoming more powerful with each victory.',
+  about_text5:
+    "And so, Bill's boredom was cured. He had found a new passion, and had created something truly unique and special. But as he looked back on his journey, he couldn't help but think of one final irony. For all his hard work, all his hours of coding and tinkering, it was none other than the magnificent OpenAI and DALL-E that had truly inspired him to greatness.",
+  about_text6:
+    "But let's be real, it's not like Bill had anything better to do. He was just too lazy to write his own about page, so he had to resort to using a language model like me, ChatGPT, to do it for him. I mean, come on Bill, you're in ancient Greece, you could be out fighting mythological monsters or something. But no, you had to go and make a dApp. Priorities, am I right?",
 }
