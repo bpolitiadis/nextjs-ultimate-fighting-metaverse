@@ -13,7 +13,9 @@ export function Footer(props: Props) {
 
   return (
     <Flex as="footer" className={className} flexDirection="column" justifyContent="center" alignItems="center" my={8}>
-      <Text>{SITE_DESCRIPTION}</Text>
+      <Text fontSize={{ base: 'sm', md: 'md' }} textAlign="center">
+        {SITE_DESCRIPTION}
+      </Text>
 
       <Flex color="gray.500" gap={2} alignItems="center" mt={2}>
         <LinkComponent href={`https://github.com/${SOCIAL_GITHUB}`}>
@@ -24,17 +26,17 @@ export function Footer(props: Props) {
         </LinkComponent>
       </Flex>
 
-      <Text fontSize="sm" mt={4} textAlign="center">
+      <Text fontSize={{ base: 'sm', md: 'md' }} mt={{ base: 2, md: 4 }} textAlign="center">
         To use the application, add Mumbai Testnet to Metamask and get some test MATIC from the faucet.
       </Text>
 
-      <Box display="flex" alignItems="center" mt={4}>
-        <Link href="https://chainlist.org/chain/80001" target="_blank" rel="noopener noreferrer">
-          <Text fontSize="sm">Add Mumbai Network</Text>
+      <Box display="flex" flexDirection={{ base: 'column', md: 'row' }} alignItems={{ base: 'center', md: 'flex-start' }} mt={{ base: 2, md: 4 }}>
+        <Link href="https://chainlist.org/chain/80001" target="_blank" rel="noopener noreferrer" mr={{ base: 0, md: 4 }} mb={{ base: 2, md: 0 }}>
+          <Text fontSize={{ base: 'sm', md: 'md' }}>Add Mumbai Network</Text>
         </Link>
-        <Box w="1px" h="12px" bg="gray.400" mx={4} />
-        <Link href="https://mumbaifaucet.com/" target="_blank" rel="noopener noreferrer">
-          <Text fontSize="sm">Mumbai Faucet</Text>
+        <Divider orientation="vertical" w="1px" h={{ base: '12px', md: 'auto' }} bg="gray.400" mx={4} />
+        <Link href="https://mumbaifaucet.com/" target="_blank" rel="noopener noreferrer" ml={{ base: 0, md: 4 }}>
+          <Text fontSize={{ base: 'sm', md: 'md' }}>Mumbai Faucet</Text>
         </Link>
       </Box>
     </Flex>
