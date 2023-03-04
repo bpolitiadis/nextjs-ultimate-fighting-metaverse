@@ -1,33 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Address, useAccount, useContractRead } from 'wagmi'
 import abi from '../../../constants/abi.json'
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Heading,
-  Stack,
-  Box,
-  StackDivider,
-  Text,
-  Image,
-  Flex,
-  useDisclosure,
-  ModalBody,
-  ModalContent,
-  Modal,
-  ModalOverlay,
-  ModalHeader,
-  ModalCloseButton,
-  useTheme,
-  Button,
-  Container,
-  ThemeProvider,
-  Badge,
-  Divider,
-} from '@chakra-ui/react'
-import { ThemeContext } from '@emotion/react'
+import { Card, CardHeader, CardBody, Stack, Box, Text, Image, Flex, useDisclosure, useTheme, Badge, Divider } from '@chakra-ui/react'
 import { ipfsGatewayReplace } from 'utils/helpers/helpers'
 import { FighterModal } from 'components/common/FighterModal'
 
@@ -143,51 +117,47 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: number;
   }, [ownerData])
 
   return (
-    <Box width={['85%', '80%', '75%']} mx="auto" my={4}>
+    <Box width={['85%', '80%', '75%']} mx={1} my={2}>
       <Card
         minWidth="250px"
         maxWidth="250px"
         rounded="lg"
-        borderWidth={isSelected ? '2px' : '1px'}
-        borderColor={isSelected ? 'blue.200' : 'gray.500'}
+        borderWidth={isSelected ? '4px' : '2px'}
+        borderColor={RarityColors[myFighterStats.rarity]}
         cursor="pointer"
-        // bgColor={myFighterStats.rarity ? rarityColors[myFighterStats.rarity] : 'gray.400'}
-        onClick={() => onClick(fighter)}>
-        <CardHeader>
-          <Text align="center" fontSize="2xl" fontFamily="fantasy" fontStyle="oblique">
-            Fighter #{fighter}
-          </Text>
-        </CardHeader>
+        onClick={() => onClick(fighter)}
+        _hover={{
+          boxShadow: `0px 0px 10px ${theme.colors.gray[400]}`,
+          borderColor: RarityColors[myFighterStats.rarity], //: theme.colors.gray[500],
+        }}>
+        <Box
+          position="relative"
+          backgroundColor={myFighterStats.rarity ? RarityColors[myFighterStats.rarity] : 'gray.400'}
+          borderRadius="md"
+          borderBottomRadius={0}
+          overflow="hidden">
+          <Image
+            cursor="pointer"
+            src={`data:image/png;base64,${myFighterImageBase64}`}
+            alt={myFighterTokenId}
+            objectFit="cover"
+            height="100%"
+            width="100%"
+            onClick={onOpen}
+          />
+        </Box>
+        <Badge colorScheme={RarityColors[myFighterStats.rarity]} textAlign={'center'} justifyContent={'center'}>
+          {Rarities[myFighterStats.rarity]} #{fighter}
+        </Badge>
         <CardBody textAlign="center">
-          <Stack>
-            <Image
-              cursor="pointer"
-              border="4px"
-              borderColor={myFighterStats.rarity ? RarityColors[myFighterStats.rarity] : 'gray.400'}
-              borderRadius="md"
-              src={`data:image/png;base64,${myFighterImageBase64}`}
-              alt={myFighterTokenId}
-              objectFit="cover"
-              onClick={onOpen}
-            />
-            <Badge colorScheme={RarityColors[myFighterStats.rarity]}>{Rarities[myFighterStats.rarity]}</Badge>
-            <Divider />
-            <Box>
-              {/* <Text>Rarity: {Rarities[myFighterStats.rarity]}</Text> */}
-              <Text>Strength: {myFighterStats.strength}</Text>
-              <Text>Stamina: {myFighterStats.stamina}</Text>
-              <Text>Technique: {myFighterStats.technique}</Text>
-            </Box>
-            <Divider m="8px" />
-          </Stack>
-
+          <Box>
+            <Text>Strength: {myFighterStats.strength}</Text>
+            <Text>Stamina: {myFighterStats.stamina}</Text>
+            <Text>Technique: {myFighterStats.technique}</Text>
+          </Box>
+          <Divider m="4px" />
           <Text marginTop="8px">Victories: {myFighterStats.victories}</Text>
         </CardBody>
-        {/* <CardFooter justifyContent="center">
-          <Button colorScheme="blue" variant="outline" size="sm" onClick={onOpen}>
-            Details
-          </Button>
-        </CardFooter> */}
       </Card>
       <FighterModal
         isOpen={isOpen}
@@ -197,38 +167,6 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: number;
         fighterImageBase64={myFighterImageBase64}
         owner={owner}
       />
-      {/* <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent textAlign="center">
-          <ModalHeader fontFamily="fantasy" fontStyle="oblique">
-            Fighter #{fighter}
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Box>
-              <Stack>
-                <Image
-                  border="4px"
-                  borderColor={myFighterStats.rarity ? RarityColors[myFighterStats.rarity] : 'gray.400'}
-                  borderRadius="md"
-                  src={`data:image/png;base64,${myFighterImageBase64}`}
-                  alt={myFighterTokenId}
-                  objectFit="cover"
-                />
-                <Badge colorScheme={RarityColors[myFighterStats.rarity]}>{Rarities[myFighterStats.rarity]}</Badge>
-                <Divider />
-                <Box>
-                  <Text>Strength: {myFighterStats.strength}</Text>
-                  <Text>Stamina: {myFighterStats.stamina}</Text>
-                  <Text>Technique: {myFighterStats.technique}</Text>
-                </Box>
-                <Divider m="8px" />
-              </Stack>
-              <Text marginTop="8px">Victories: {myFighterStats.victories}</Text>
-            </Box>
-          </ModalBody>
-        </ModalContent>
-      </Modal> */}
     </Box>
   )
 }

@@ -108,7 +108,10 @@ export default function Fight() {
                 <>
                   <Text>Congratulations! You own {myFighterIds.length} Ultimate Fighters!</Text>
                   <Text>Here are the fighters you own. Select one to fight!</Text>
-                  <SimpleGrid minChildWidth="120px" spacing="16px" gridTemplateColumns={`repeat(${numColumns}, 1fr)`}>
+                  <SimpleGrid
+                    minChildWidth={{ sm: '90px', md: '120px' }}
+                    spacing={{ sm: '8px', md: '16px' }}
+                    gridTemplateColumns={`repeat(${numColumns}, 1fr)`}>
                     {myFighterIds.map((id) => (
                       <FighterCard key={id} fighter={id} isSelected={id === selectedFighterId} onClick={() => setSelectedFighterId(id)} />
                     ))}
@@ -135,9 +138,9 @@ export default function Fight() {
           {isConnected && (
             <>
               <Text>Here are the arenas you can fight in.</Text>
-              <SimpleGrid columns={4} spacing={0}>
+              <SimpleGrid columns={{ sm: 2, md: 4 }} spacing={{ sm: '8px', md: '0' }}>
                 {arenas.map((arena, index) => (
-                  <Box p={4} key={index}>
+                  <Box p={{ sm: '2', md: '4' }} key={index}>
                     <ArenaCard
                       key={index}
                       arenaNo={index + 1}
