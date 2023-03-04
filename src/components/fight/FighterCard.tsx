@@ -127,8 +127,8 @@ export const FighterCard = ({ fighter, isSelected, onClick }: { fighter: number;
         cursor="pointer"
         onClick={() => onClick(fighter)}
         _hover={{
-          boxShadow: `0px 0px 10px ${theme.colors.gray[400]}`,
-          borderColor: RarityColors[myFighterStats.rarity], //: theme.colors.gray[500],
+          boxShadow: `0px 0px 10px ${RarityColors[myFighterStats.rarity]}`,
+          borderColor: RarityColors[myFighterStats.rarity],
         }}>
         <Box
           position="relative"

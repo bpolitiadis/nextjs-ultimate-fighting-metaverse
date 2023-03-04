@@ -138,7 +138,7 @@ export default function Fight() {
           {isConnected && (
             <>
               <Text>Here are the arenas you can fight in.</Text>
-              <SimpleGrid columns={{ sm: 2, md: 4 }} spacing={{ sm: '8px', md: '0' }}>
+              <SimpleGrid columns={{ sm: 2, md: 4 }} spacing={{ sm: '4px', md: '0' }}>
                 {arenas.map((arena, index) => (
                   <Box p={{ sm: '2', md: '4' }} key={index}>
                     <ArenaCard

@@ -243,7 +243,7 @@ export const ArenaCard = ({
 
   return (
     <>
-      <Box>
+      <Box p={2}>
         <Card rounded="lg" borderWidth="1px" borderColor="gray.500">
           <Box position="relative">
             <Image
