@@ -25,7 +25,7 @@ export default function Home() {
             </Text>
 
             <Box alignItems="center" px={6} py={8} justifyContent="center">
-              <Image src={images[0]} alt="fighter-collage-1" maxWidth={['100%', '80%', '60%']} margin="0 auto" />
+              <Image src={images[0]} alt="fighter-collage-1" maxWidth={['100%', '80%']} margin="0 auto" />
             </Box>
 
             <Text textAlign="center" my={4} fontSize={['md', 'lg']}>
@@ -33,7 +33,7 @@ export default function Home() {
             </Text>
 
             <Box alignItems="center" px={6} py={8} justifyContent="center">
-              <Image src={images[1]} alt="arena-collage-1" maxWidth={['100%', '80%', '60%']} margin="0 auto" />
+              <Image src={images[1]} alt="arena-collage-1" maxWidth={['100%', '80%']} margin="0 auto" />
             </Box>
 
             <Text textAlign="center" my={4} fontSize={['md', 'lg']}>

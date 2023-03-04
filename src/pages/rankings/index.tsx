@@ -62,7 +62,7 @@ export default function Rankings() {
   return (
     <>
       <Head />
-      <Heading as="h2" m="24px">
+      <Heading as="h2" m={{ base: '24px', md: '32px' }}>
         Rankings Page
       </Heading>
       {/* <Text>Welcome to the Ultimate Fighting Metaverse! Rankings Page</Text> */}
@@ -88,20 +88,24 @@ export default function Rankings() {
         </GridItem>
       </Grid>
       <Divider m="4px" />
-      <Box width="100%" mx="auto" p={4}>
+      <Box width="100%" mx="auto" p={{ base: 2, md: 4 }}>
         {/* map through the current entries and display a RankingItem for each */}
         {currentEntries.map((fighterId) => (
           <RankingItem key={fighterId} fighter={fighterId} />
         ))}
       </Box>
-      <Box display="flex" justifyContent="center">
-        <Button onClick={handlePreviousPage} disabled={currentPage === 1}>
+      <Flex justifyContent="center" flexDirection={{ base: 'column', md: 'row' }}>
+        <Button onClick={handlePreviousPage} disabled={currentPage === 1} m={{ base: '8px 0', md: '0 8px' }} width={{ base: '100%', md: 'auto' }}>
           Previous Page
         </Button>
-        <Button onClick={handleNextPage} disabled={currentPage === Math.ceil(myFighterIds.length / entriesPerPage)}>
+        <Button
+          onClick={handleNextPage}
+          disabled={currentPage === Math.ceil(myFighterIds.length / entriesPerPage)}
+          m={{ base: '8px 0', md: '0 8px' }}
+          width={{ base: '100%', md: 'auto' }}>
           Next Page
         </Button>
-      </Box>
+      </Flex>
     </>
   )
 }

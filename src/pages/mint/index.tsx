@@ -1,11 +1,8 @@
-import { Heading, Text, Button, Image, Spacer, Box, Link, SimpleGrid } from '@chakra-ui/react'
+import { Heading, Text, Box, Link, SimpleGrid } from '@chakra-ui/react'
 import { Head } from 'components/layout/Head'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { ImagesResponseDataInner, OpenAIApi } from 'openai'
 import { useAccount } from 'wagmi'
-import abi from '../../../constants/abi.json'
-import css from '../../styles/mint.module.css'
-import { Address, readContract } from '@wagmi/core'
 import CreateFighter from 'components/mint/CreateFighter'
 import MintFighter from 'components/mint/MintFighter'
 
