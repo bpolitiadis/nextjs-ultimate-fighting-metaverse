@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Address,
   useAccount,
-  useTransaction,
   useContractRead,
   useContractEvent,
   usePrepareContractWrite,
@@ -11,35 +10,10 @@ import {
   useProvider,
 } from 'wagmi'
 import abi from '../../../constants/abi.json'
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Heading,
-  Stack,
-  Box,
-  StackDivider,
-  Text,
-  Image,
-  Flex,
-  Button,
-  Spacer,
-  useToast,
-  ModalOverlay,
-  Modal,
-  useDisclosure,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  Spinner,
-  Divider,
-  Avatar,
-} from '@chakra-ui/react'
-import { ethers, providers } from 'ethers'
-import { messages } from '../../../constants/dictionary'
+import { Card, CardBody, Box, Text, Image, Flex, Button, Spacer, useToast, useDisclosure, Spinner, Divider, Avatar } from '@chakra-ui/react'
+import { ethers } from 'ethers'
 import { ipfsGatewayReplace } from 'utils/helpers/helpers'
+import { FightModal } from './FightModal'
 
 export interface ArenaCardProps {
   matchId: number
@@ -255,11 +229,6 @@ export const ArenaCard = ({
               height="200px"
               objectFit="cover"
             />
-            {/* <Box position="absolute" top="8px" left="8px">
-              <Tag colorScheme="blue" size="md">
-                Arena #{arenaNo}
-              </Tag>
-            </Box> */}
           </Box>
           <Divider />
           <CardBody>
@@ -283,82 +252,15 @@ export const ArenaCard = ({
           </CardBody>
         </Card>
       </Box>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered blockScrollOnMount={false}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader textAlign="center">
-            {isLoading && (
-              <>
-                <Text textAlign="center">Joining the arena...</Text>
-              </>
-            )}
-            {isSuccess && (
-              <>
-                <Text textAlign="center">Joined the arena!</Text>
-              </>
-            )}
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            {isLoading && (
-              <>
-                <Flex flexDir="column" justifyContent="center" alignItems="center">
-                  <Spinner />
-                  <Text verticalAlign="center" m="16px" fontStyle="oblique">
-                    Joining arena...
-                  </Text>
-                </Flex>
-              </>
-            )}
-            {isSuccess && (
-              <>
-                {myArena.tokenId2 == 0 && (
-                  <>
-                    <Text verticalAlign="center" m="16px" fontStyle="oblique" justifyContent="center">
-                      Waiting for another fighter to join...
-                    </Text>
-                  </>
-                )}
-                {myArena.tokenId2 != 0 && (
-                  <>
-                    {myArena.winnerId == selectedFighter && (
-                      <>
-                        <Flex flexDir="column" justifyContent="center" alignItems="center">
-                          <Image src={'./svg/gold-cup.svg'} alt="Victory" width="15%" height="15%" />
-                          <Text fontWeight="bold" fontSize="2xl" textAlign="center">
-                            You won!
-                          </Text>
-                          <Text fontSize="md" fontStyle="oblique" textAlign="center">
-                            {messages.winningMessages[Math.floor(Math.random() * messages.winningMessages.length)]}
-                          </Text>
-                        </Flex>
-                      </>
-                    )}
-                    {myArena.winnerId != selectedFighter && (
-                      <>
-                        <Flex flexDir="column" justifyContent="center" alignItems="center">
-                          <Image src={'./svg/sad-face.svg'} alt="Victory" width="15%" height="15%" />
-                          <Text fontWeight="bold" fontSize="2xl" textAlign="center">
-                            You lost!
-                          </Text>
-                          <Text fontSize="md" fontStyle="oblique" textAlign="center">
-                            {messages.losingMessages[Math.floor(Math.random() * messages.losingMessages.length)]}
-                          </Text>
-                        </Flex>
-                      </>
-                    )}
-                  </>
-                )}
-              </>
-            )}
-            {isError && (
-              <>
-                <Text textAlign="center">Something went wrong</Text>
-              </>
-            )}
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <FightModal
+        isOpen={isOpen}
+        onClose={onClose}
+        arena={myArena}
+        selectedFighter={selectedFighter}
+        isLoading={isLoading}
+        isSuccess={isSuccess}
+        isError={isError}
+      />
     </>
   )
 }

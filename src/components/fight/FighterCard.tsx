@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Address, useAccount, useContractRead } from 'wagmi'
+import { Address, useContractRead } from 'wagmi'
 import abi from '../../../constants/abi.json'
-import { Card, CardHeader, CardBody, Stack, Box, Text, Image, Flex, useDisclosure, useTheme, Badge, Divider } from '@chakra-ui/react'
+import { Card, CardBody, Box, Text, Image, useDisclosure, useTheme, Badge, Divider } from '@chakra-ui/react'
 import { ipfsGatewayReplace } from 'utils/helpers/helpers'
 import { FighterModal } from 'components/common/FighterModal'
 
