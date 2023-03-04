@@ -104,7 +104,7 @@ export default function CreateFighter({
 
   return (
     <Box className={css.selectionMenu}>
-      <Text>Select you fighter&apos;s charachteristics:</Text>
+      <Text>Select your fighter&apos;s characteristics:</Text>
       <Spacer m="16px" />
       <FormControl>
         <Select placeholder="Select gender" value={formData.gender} onChange={handleChange} name="gender">
@@ -150,7 +150,7 @@ export default function CreateFighter({
         </Select>
       </FormControl>
       <Spacer m="16px" />
-      <Button isDisabled={!isFormComplete} onClick={create} variant="outline" width="400px" colorScheme="teal">
+      <Button isDisabled={!isFormComplete} onClick={create} variant="outline" width={{ base: '100%', md: '400px' }} colorScheme="teal">
         Generate
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>

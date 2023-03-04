@@ -214,7 +214,7 @@ export default function MintFighter({ imagesBinaryData }: { imagesBinaryData: Im
         disabled={isLoading || selectedImageIndex === -1 || selectedImage === ''}
         onClick={handleMint}
         variant="outline"
-        width="400px"
+        width={{ base: '100%', md: '400px' }}
         colorScheme="teal"
         className={css.Button}>
         {isLoading ? 'Minting...' : 'Mint'}
