@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, MouseEvent } from 'react'
 import NextLink from 'next/link'
 import { Link, useColorModeValue } from '@chakra-ui/react'
 import { THEME_COLOR_SCHEME } from 'utils/config'
@@ -8,6 +8,7 @@ interface Props {
   children: ReactNode
   isExternal?: boolean
   className?: string
+  onClick?: (event: MouseEvent<HTMLAnchorElement>) => void // Add the onClick property to the interface
 }
 
 export function LinkComponent(props: Props) {
@@ -17,14 +18,27 @@ export function LinkComponent(props: Props) {
 
   if (isExternal) {
     return (
-      <Link className={className} _hover={{ color: color }} href={props.href} target="_blank" rel="noopener noreferrer">
+      <Link
+        className={className}
+        _hover={{ color: color }}
+        href={props.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={props.onClick} // Add the onClick property to the anchor tag
+      >
         {props.children}
       </Link>
     )
   }
 
   return (
-    <Link as={NextLink} className={className} _hover={{ color: color }} href={props.href}>
+    <Link
+      as={NextLink}
+      className={className}
+      _hover={{ color: color }}
+      href={props.href}
+      onClick={props.onClick} // Add the onClick property to the anchor tag
+    >
       {props.children}
     </Link>
   )
