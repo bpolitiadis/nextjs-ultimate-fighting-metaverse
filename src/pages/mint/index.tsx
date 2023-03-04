@@ -1,4 +1,4 @@
-import { Heading, Text, Button, Image, Spacer, Box, Link } from '@chakra-ui/react'
+import { Heading, Text, Button, Image, Spacer, Box, Link, SimpleGrid } from '@chakra-ui/react'
 import { Head } from 'components/layout/Head'
 import React, { useEffect, useRef, useState } from 'react'
 import { ImagesResponseDataInner, OpenAIApi } from 'openai'
@@ -31,15 +31,13 @@ export default function Mint() {
         {/* Only show the creation and minting components if the user is connected to their wallet */}
         {isConnected && (
           <>
-            <Box className={css.root}>
-              <Box className={css.container}>
-                {/* Pass the `setImagesBinaryData` function as a prop to the `CreateFighter` component */}
-                <CreateFighter setImagesBinaryData={setImagesBinaryData} />
-                <Spacer m="16px" />
-                {/* Pass the `imagesBinaryData` state as a prop to the `MintFighter` component */}
-                <MintFighter imagesBinaryData={imagesBinaryData} />
-              </Box>
-            </Box>
+            {/* Use SimpleGrid to display the components side by side on a computer or laptop screen */}
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
+              {/* Pass the `setImagesBinaryData` function as a prop to the `CreateFighter` component */}
+              <CreateFighter setImagesBinaryData={setImagesBinaryData} />
+              {/* Pass the `imagesBinaryData` state as a prop to the `MintFighter` component */}
+              <MintFighter imagesBinaryData={imagesBinaryData} />
+            </SimpleGrid>
           </>
         )}
         {/* Show a message if the user is not connected to their wallet */}
