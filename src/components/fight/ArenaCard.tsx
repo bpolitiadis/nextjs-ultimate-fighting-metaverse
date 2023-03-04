@@ -244,46 +244,41 @@ export const ArenaCard = ({
   return (
     <>
       <Box>
-        <Card textAlign="center" rounded="lg" borderWidth="1px" borderColor="gray.500">
-          <CardHeader>
-            <Heading size="md">Arena #{arenaNo}</Heading>
-          </CardHeader>
+        <Card rounded="lg" borderWidth="1px" borderColor="gray.500">
+          <Box position="relative">
+            <Image
+              src={`./images/arena${arenaNo}.jpg`}
+              alt="Arena Image"
+              borderRadius="lg"
+              borderBottomRadius={0}
+              width="100%"
+              height="200px"
+              objectFit="cover"
+            />
+            {/* <Box position="absolute" top="8px" left="8px">
+              <Tag colorScheme="blue" size="md">
+                Arena #{arenaNo}
+              </Tag>
+            </Box> */}
+          </Box>
           <Divider />
           <CardBody>
-            <Box alignItems="center" justifyContent="center">
-              <Image
-                src={`./images/arena${arenaNo}.jpg`}
-                alt={'ArenaImg'}
-                borderRadius="3xl"
-                border="1px"
-                borderColor="chakra-subtle-bg"
-                width="100%"
-                height="100%"
-                objectFit="contain"></Image>
-            </Box>
-            <Spacer m="24px" />
             <Flex flexDirection="row" alignItems="center" justifyContent="center">
-              {arena.tokenId1 !== 0 && (
-                <>
-                  <Flex flexDirection="row" align="center" justifyContent="center">
-                    <Avatar src={`data:image/png;base64,${token1Image64}`} />
-                    <Spacer m="4px" />
-                    <Text> #{arena.tokenId1} waiting</Text>
-                  </Flex>
-                </>
-              )}
-              {arena.tokenId1 == 0 && (
-                <>
-                  <Text align="center" justifyContent="center">
-                    Arena is empty.
-                  </Text>
-                </>
+              {arena.tokenId1 !== 0 ? (
+                <Flex flexDirection="row" align="center" justifyContent="center">
+                  <Avatar src={`data:image/png;base64,${token1Image64}`} />
+                  <Spacer m="4px" />
+                  <Text>#{arena.tokenId1} is waiting</Text>
+                </Flex>
+              ) : (
+                <Text align="center" justifyContent="center">
+                  Arena is empty.
+                </Text>
               )}
             </Flex>
-
             <Spacer m="24px" />
-            <Button colorScheme="blue" onClick={joinArena} variant="outline" size="sm">
-              Join Arena
+            <Button colorScheme="blue" onClick={joinArena} size="sm" variant="outline" disabled={isLoading || isSuccess} width="100%">
+              {isLoading && <Spinner size="xs" mr="2" />} {isSuccess ? 'Joined!' : 'Join Arena'}
             </Button>
           </CardBody>
         </Card>
