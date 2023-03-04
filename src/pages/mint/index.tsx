@@ -28,11 +28,8 @@ export default function Mint() {
         {/* Only show the creation and minting components if the user is connected to their wallet */}
         {isConnected && (
           <>
-            {/* Use SimpleGrid to display the components side by side on a computer or laptop screen */}
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
-              {/* Pass the `setImagesBinaryData` function as a prop to the `CreateFighter` component */}
               <CreateFighter setImagesBinaryData={setImagesBinaryData} />
-              {/* Pass the `imagesBinaryData` state as a prop to the `MintFighter` component */}
               <MintFighter imagesBinaryData={imagesBinaryData} />
             </SimpleGrid>
           </>
