@@ -7,8 +7,6 @@ export default function Home() {
   const images = {
     fightersH: './images/fightersH.jpg',
     fightersV: './images/fightersV.jpg',
-    // arenaCollageH: './images/arenaCollage1.jpg',
-    // arenaCollageV: './images/arenaV-white.jpg',
     arenasH: './images/arenasH.jpg',
     arenasV: './images/arenasV.jpg',
     solidityLogo: './images/solidity-logo.png',
@@ -17,44 +15,92 @@ export default function Home() {
     dalleLogo: './images/dalle-logo.webp',
   }
 
-  // const bgImage = useColorModeValue(images.fightersH_white, images.fightersH_black)
-  const bgTextColor = useColorModeValue('white', 'white')
+  const bgColor = 'rgba(30, 30, 40, 0.8)'
 
   return (
     <>
       {/* <Heading as="h1" size={['xl', '2xl']} textAlign="center" my={8}>
         {content.home_title}
       </Heading> */}
-      <Box px={6} py={[8, 32]} bgImage={[images.fightersV, images.fightersH]} bgSize="cover" bgPosition="center" borderRadius="lg">
-        <Flex flexDirection={['column', 'row']} justifyContent="space-between" alignItems={['center', 'flex-start']}>
-          <Box flex="1" alignItems={['center', 'flex-start']} py={8} textAlign={['center', 'left']} mb={[8, 0]}>
-            <Heading as="h1" size={['xl', '2xl']} textAlign={['center', 'left']} mx={['auto', 0]} mb={8} color={bgTextColor}>
+      {/* Home page hero section */}
+      <Box px={6} py={[8, 32]} bgImage={[images.fightersV, images.fightersH]} bgSize="cover" bgPosition="center" borderRadius="lg" mx="auto">
+        <Flex flexDirection={['column', 'row']} justifyContent="space-between" alignItems="center" bgColor={bgColor} borderRadius="2xl">
+          {/* Create your own fighter Call to action */}
+          <Box flex="1" py={8} textAlign="center" mb={[8, 0]}>
+            <Heading as="h1" size={['xl', '2xl']} textAlign="center" mx="auto" mb={8} color="white" textShadow="1px 1px 2px black">
               {content.home_mint_title}
             </Heading>
-            <Text textAlign={['center', 'left']} my={4} fontSize={['lg', 'xl']} maxWidth={['100%', '70%']} color={bgTextColor}>
+            <Text
+              textAlign="center"
+              my={4}
+              fontSize={['lg', 'xl']}
+              maxWidth={['100%', '70%']}
+              color="white"
+              mx="auto"
+              px={8}
+              textShadow="1px 1px 2px black">
               {content.home_description}
             </Text>
             <Link href="/mint">
-              <Button as="a" colorScheme="red" size={['md', 'lg']} mt={8} mb={[8, 0]} mx={['auto', 0]}>
+              <Button
+                as="a"
+                colorScheme="teal"
+                size={['md', 'lg']}
+                mt={8}
+                mb={[8, 0]}
+                mx="auto"
+                textTransform="uppercase"
+                fontWeight="bold"
+                letterSpacing="wide"
+                _hover={{
+                  background: 'teal.600',
+                  boxShadow: '0 0 0 3px rgba(59, 130, 150, 0.6)',
+                }}
+                _active={{
+                  background: 'teal.700',
+                  boxShadow: 'inset 0 0 0 2px rgba(0, 0, 0, 0.2)',
+                }}
+                _focus={{
+                  boxShadow: 'none',
+                }}>
                 {content.home_cta}
               </Button>
             </Link>
           </Box>
-          <Box flex="1" alignItems={['center', 'flex-end']} px={6} py={8}>
+          {/* Fight in the arenas Call to action */}
+          <Box flex="1" alignItems="center" justifyContent="center" px={6} py={8}>
             <Grid templateColumns={['1fr', '1fr 1fr']} gap={[8, 12]} p={8} border="2px solid" borderColor="gray.200" borderRadius="xl">
-              <Box>
-                <Image src={images.arenasV} alt="arena-collage-1" maxWidth="100%" display={['none', 'block']} />
-                <Image src={images.arenasH} alt="arena-collage-1-mobile" maxWidth="100%" display={['block', 'none']} />
+              <Box alignItems="center" justifyContent="center" display="flex">
+                <Image src={images.arenasV} alt="arenas-vertical" maxWidth="100%" display={['none', 'block']} />
+                <Image src={images.arenasH} alt="arenas-horizontal" maxWidth="100%" display={['block', 'none']} />
               </Box>
-              <Box>
-                <Heading as="h2" size={['md', 'lg']} mb={4} color={bgTextColor}>
+              <Box textAlign="center">
+                <Heading as="h2" size={['lg', 'xl']} mb={4} color="white" textShadow="1px 1px 2px black">
                   {content.home_second_box_title}
                 </Heading>
-                <Text textAlign="left" my={4} fontSize="md" color={bgTextColor}>
+                <Text textAlign="center" my={4} fontSize={['md', 'lg']} color="white" textShadow="1px 1px 2px black">
                   {content.home_second_box_description}
                 </Text>
                 <Link href="/fight">
-                  <Button as="a" colorScheme="teal" size="lg" mt={8}>
+                  <Button
+                    as="a"
+                    colorScheme="pink"
+                    size={['md', 'lg']}
+                    mt={8}
+                    textTransform="uppercase"
+                    fontWeight="bold"
+                    letterSpacing="wide"
+                    _hover={{
+                      background: 'pink.600',
+                      boxShadow: '0 0 0 3px rgba(221, 34, 139, 0.6)',
+                    }}
+                    _active={{
+                      background: 'pink.700',
+                      boxShadow: 'inset 0 0 0 2px rgba(0, 0, 0, 0.2)',
+                    }}
+                    _focus={{
+                      boxShadow: 'none',
+                    }}>
                     {content.home_second_box_cta}
                   </Button>
                 </Link>
@@ -66,12 +112,26 @@ export default function Home() {
 
       <Divider my={8} opacity={0} />
 
+      {/* Technologies used */}
       <Box px={6} py={[8, 32]}>
-        <Box textAlign="center" mb={8}>
-          <Heading as="h3" size="md" mb={4}>
+        <Box textAlign="center" mb={16}>
+          <Heading
+            as="h2"
+            size={['xl', '2xl']}
+            textAlign="center"
+            mx="auto"
+            mb={8}
+            color={useColorModeValue('black', 'white')}
+            textShadow={useColorModeValue('1px 1px 2px rgba(0, 0, 0, 0.2)', '1px 1px 2px black')}>
             {content.home_third_box_title}
           </Heading>
-          <Text fontSize="md">{content.home_third_box_description}</Text>
+          <Text
+            textAlign="center"
+            fontSize={['lg', 'xl']}
+            color={useColorModeValue('black', 'white')}
+            textShadow={useColorModeValue('1px 1px 2px rgba(0, 0, 0, 0.2)', '1px 1px 2px black')}>
+            {content.home_third_box_description}
+          </Text>
         </Box>
         <Grid templateColumns={['repeat(2, 1fr)', 'repeat(2, 1fr)', 'repeat(4, 1fr)']} gap={8}>
           <Box>
