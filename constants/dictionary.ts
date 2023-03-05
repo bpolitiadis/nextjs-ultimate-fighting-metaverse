@@ -37,6 +37,17 @@ export const content = {
     'But let’s not forget about the technologies that make all of this possible. We’re talking about OpenAI’s DALL-E, Ethereum Solidity, Nextjs, Web3, and the Metaverse. With these cutting-edge technologies, we’re able to bring you a truly unique and immersive web3 fighting experience. So thank you, technology, for making our wildest dreams a reality.',
   home_description5:
     'In conclusion, our web3 dApp fighting game is the perfect blend of AI-generated uniqueness and competitive gameplay. So go mint your own fighter, put them to the test, and show the world who’s boss. With the help of OpenAI, Ethereum, and the Metaverse, the possibilities are endless. See you in the ring!',
+  home_mint_title: 'Create your NFT Fighter!',
+  home_description:
+    "Create your own unique fighter with the help of OpenAI's DALL-E AI technology and enter the arena to show off your skills against other players.",
+  home_cta: 'Mint Your Fighter',
+  home_second_box_title: 'Step into the Arena',
+  home_second_box_description:
+    'After you mint your fighter, head over to the fight page to enter the arena and show off your skills against other players.',
+  home_second_box_cta: 'Fight Now',
+  home_third_box_title: 'Built with Cutting-Edge Technologies',
+  home_third_box_description:
+    'The development of this app was enabled by leveraging latest technologies like Ethereum Solidity, NextJS, OpenAI, and DALL-E. The result is a highly innovative and immersive web3 fighting game.',
   about_title: 'About Ultimate Fighting Metaverse',
   about_text1:
     'Once upon a time, in the ancient land of Athens, Greece, there lived a man named Bill. Bill was a man of simple pleasures - he enjoyed a cold beer on a hot day, a good book on a rainy one, and the occasional video game to pass the time. But one day, Bill grew tired of the same old routine. He found himself feeling unfulfilled, like there was something missing in his life. And so, he began to explore the world of Web3 development.',
