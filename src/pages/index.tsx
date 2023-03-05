@@ -39,7 +39,7 @@ export default function Home() {
               mx="auto"
               px={8}
               textShadow="1px 1px 2px black">
-              {content.home_description}
+              {content.home_mint_description}
             </Text>
             <Link href="/mint">
               <Button
@@ -63,7 +63,7 @@ export default function Home() {
                 _focus={{
                   boxShadow: 'none',
                 }}>
-                {content.home_cta}
+                {content.home_mint_cta}
               </Button>
             </Link>
           </Box>
@@ -76,10 +76,10 @@ export default function Home() {
               </Box>
               <Box textAlign="center">
                 <Heading as="h2" size={['lg', 'xl']} mb={4} color="white" textShadow="1px 1px 2px black">
-                  {content.home_second_box_title}
+                  {content.home_fight_title}
                 </Heading>
                 <Text textAlign="center" my={4} fontSize={['md', 'lg']} color="white" textShadow="1px 1px 2px black">
-                  {content.home_second_box_description}
+                  {content.home_fight_description}
                 </Text>
                 <Link href="/fight">
                   <Button
@@ -101,7 +101,7 @@ export default function Home() {
                     _focus={{
                       boxShadow: 'none',
                     }}>
-                    {content.home_second_box_cta}
+                    {content.home_fight_cta}
                   </Button>
                 </Link>
               </Box>
@@ -123,14 +123,14 @@ export default function Home() {
             mb={8}
             color={useColorModeValue('black', 'white')}
             textShadow={useColorModeValue('1px 1px 2px rgba(0, 0, 0, 0.2)', '1px 1px 2px black')}>
-            {content.home_third_box_title}
+            {content.home_technologies_title}
           </Heading>
           <Text
             textAlign="center"
             fontSize={['lg', 'xl']}
             color={useColorModeValue('black', 'white')}
             textShadow={useColorModeValue('1px 1px 2px rgba(0, 0, 0, 0.2)', '1px 1px 2px black')}>
-            {content.home_third_box_description}
+            {content.home_technologies_description}
           </Text>
         </Box>
         <Grid templateColumns={['repeat(2, 1fr)', 'repeat(2, 1fr)', 'repeat(4, 1fr)']} gap={8}>

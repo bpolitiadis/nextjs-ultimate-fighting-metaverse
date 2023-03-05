@@ -101,7 +101,7 @@ export default function Fight() {
           </Heading>
           {isConnected && (
             <>
-              <Text>Hello {user} !</Text>
+              {/* <Text>Hello {user} !</Text> */}
               {myFighterIds.length === 0 ? (
                 <Text textAlign="center">You don&apos;t own any fighters yet. Go to the Mint page to mint one!</Text>
               ) : (

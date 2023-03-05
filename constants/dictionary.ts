@@ -38,15 +38,15 @@ export const content = {
   home_description5:
     'In conclusion, our web3 dApp fighting game is the perfect blend of AI-generated uniqueness and competitive gameplay. So go mint your own fighter, put them to the test, and show the world who’s boss. With the help of OpenAI, Ethereum, and the Metaverse, the possibilities are endless. See you in the ring!',
   home_mint_title: 'Create your NFT Fighter!',
-  home_description:
+  home_mint_description:
     "Create your own unique fighter with the help of OpenAI's DALL-E AI technology and enter the arena to show off your skills against other players.",
-  home_cta: 'Mint Your Fighter',
-  home_second_box_title: 'Step into the Arena',
-  home_second_box_description:
+  home_mint_cta: 'Mint Your Fighter',
+  home_fight_title: 'Step into the Arena',
+  home_fight_description:
     'After you mint your fighter, head over to the fight page to enter the arena and show off your skills against other players.',
-  home_second_box_cta: 'Fight Now',
-  home_third_box_title: 'Built with Cutting-Edge Technologies',
-  home_third_box_description:
+  home_fight_cta: 'Fight Now',
+  home_technologies_title: 'Built with Cutting-Edge Technologies',
+  home_technologies_description:
     'The development of this app was enabled by leveraging latest technologies like Ethereum Solidity, NextJS, OpenAI, and DALL-E. The result is a highly innovative and immersive web3 fighting game.',
   about_title: 'About Ultimate Fighting Metaverse',
   about_text1:
