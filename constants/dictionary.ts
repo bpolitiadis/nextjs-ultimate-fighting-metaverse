@@ -52,7 +52,7 @@ export const content = {
   about_text1:
     'Once upon a time, in the ancient land of Athens, Greece, there lived a man named Bill. Bill was a man of simple pleasures - he enjoyed a cold beer on a hot day, a good book on a rainy one, and the occasional video game to pass the time. But one day, Bill grew tired of the same old routine. He found himself feeling unfulfilled, like there was something missing in his life. And so, he began to explore the world of Web3 development.',
   about_text2:
-    'At first, Bill was a bit intimidated. He had never been one for coding or programming, but he was determined to learn. He dove headfirst into the world of Solidity and EVM smart contracts, mastering the ins and outs of Hardhat and NextJS. He was particularly fond of the wagmi library and chakra-ui, which made building frontend applications a breeze.',
+    'Bill was not initially familiar with the complex world of Web3 development, but his determination and passion to learn pushed him to dive headfirst into the field. He dedicated himself to mastering Solidity, the EVM smart contract language, and Hardhat, a powerful framework for its implementation. To create the frontend of his dApp, Bill turned to the versatile NextJS framework, while relying on wagmi-ethers and chakra-ui libraries to streamline his development process.',
   about_text3:
     'As Bill learned more and more about Web3, he found himself becoming more and more obsessed. He spent hours upon hours tinkering with code and experimenting with new technologies. And before long, he had created something truly special - a portfolio dApp called Ultimate Fighting Metaverse.',
   about_text4:
